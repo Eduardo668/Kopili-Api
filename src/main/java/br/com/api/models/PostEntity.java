@@ -19,6 +19,10 @@ public class PostEntity {
     @Lob
     private String description;
 
+    @Size(max = 100)
+    @NotNull
+    private String disciplina;
+
     @NotNull
     private Date createdAt;
 

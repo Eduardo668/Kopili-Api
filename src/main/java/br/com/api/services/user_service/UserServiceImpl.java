@@ -57,7 +57,22 @@ public class UserServiceImpl implements UserService {
     public UserEntity editUser(UserEntity editedUser, Long user_id) {
         try{
             Optional<UserEntity> user_opt = userRepository.findById(user_id);
-            if (user_opt.)
+            if (user_opt.isEmpty()){
+                throw new RuntimeException("Deu pau");
+            }
+
+            user_opt.map(user -> {
+              user.setFullname(editedUser.getFullname());
+              user.setEmail(editedUser.getEmail());
+              user.setAge(editedUser.getAge());
+              user.setPassword(editedUser.getPassword());
+              user.setUsername();
+            })
+
+
+
+
+
 
 
         }
