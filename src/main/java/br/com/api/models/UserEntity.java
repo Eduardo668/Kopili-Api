@@ -5,10 +5,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
 import java.util.Set;
 
-@Entity(name = "Usuario")
+@Entity
 public class UserEntity {
 
     @Id
@@ -32,15 +31,18 @@ public class UserEntity {
     @Size(max = 100)
     private String email;
 
-    @NotNull
+
     @Size(max = 200)
     private String photo;
 
     @NotNull
     private int age;
 
-    @OneToOne(mappedBy = "user_commented")
-    private CommentEntity user_comments;
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "comment_id")
+    private CommentEntity user_commented;
 
     @OneToMany(mappedBy = "post")
     @JsonManagedReference

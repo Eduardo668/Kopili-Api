@@ -10,7 +10,7 @@ public interface UserService {
 
     public List<UserEntity> findAllUsers();
 
-    public void deleteUser(UserEntity deletedUser);
+    public void deleteUser(Long user_id);
 
     public UserEntity editUser(UserEntity editedUser, Long user_id);
 

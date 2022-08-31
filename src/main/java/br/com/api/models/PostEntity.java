@@ -21,10 +21,11 @@ public class PostEntity {
 
     @Size(max = 100)
     @NotNull
-    private String disciplina;
+    private String subject;
 
+    @Temporal (TemporalType.TIMESTAMP)
     @NotNull
-    private Date createdAt;
+    private Date date;
 
     @OneToMany(mappedBy = "postComments")
     @JsonManagedReference
@@ -54,11 +55,11 @@ public class PostEntity {
         this.description = description;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Date getDate() {
+        return date;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

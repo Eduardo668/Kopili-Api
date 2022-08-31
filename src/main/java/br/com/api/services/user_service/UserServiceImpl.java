@@ -2,10 +2,12 @@ package br.com.api.services.user_service;
 
 import br.com.api.models.UserEntity;
 import br.com.api.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -24,7 +26,7 @@ public class UserServiceImpl implements UserService {
                 throw new IllegalStateException("Este username já existe");
             }
 
-            userRepository.save(user_data);
+            return userRepository.save(user_data);
 
         }
         catch (Exception e){
@@ -38,15 +40,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(UserEntity deletedUser) {
+    public void deleteUser(Long user_id) {
         try {
-            UserEntity user_data = userRepository.findByUsername(deletedUser.getUsername());
+            Optional<UserEntity> user_data = userRepository.findById(user_id);
 
             if (user_data == null){
                 throw new IllegalStateException("Este usuario não existe");
             }
 
-            userRepository.delete(deletedUser);
+            userRepository.delete(user_data.get());
         }
         catch (Exception e){
             throw new RuntimeException(e);
@@ -55,27 +57,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity editUser(UserEntity editedUser, Long user_id) {
-        try{
-            Optional<UserEntity> user_opt = userRepository.findById(user_id);
-            if (user_opt.isEmpty()){
-                throw new RuntimeException("Deu pau");
-            }
-
-            user_opt.map(user -> {
-              user.setFullname(editedUser.getFullname());
-              user.setEmail(editedUser.getEmail());
-              user.setAge(editedUser.getAge());
-              user.setPassword(editedUser.getPassword());
-              user.setUsername();
-            })
-
-
-
-
-
-
-
+        try {
+            return userRepository.findById(user_id).map(user -> {
+                user.setFullname(editedUser.getFullname());
+                user.setEmail(editedUser.getEmail());
+                user.setAge(editedUser.getAge());
+                user.setPassword(editedUser.getPassword());
+                user.setUsername(editedUser.getUsername());
+                user.setPhoto(editedUser.getPhoto());
+                return userRepository.save(user);
+            }).orElseGet(() -> {
+                editedUser.setUser_id(user_id);
+                return userRepository.save(editedUser);
+            });
+        } catch (Exception e){
+            throw new RuntimeException("Deu Ruim", e);
         }
+
     }
 
     @Override

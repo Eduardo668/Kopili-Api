@@ -20,9 +20,8 @@ public class CommentEntity {
     @NotNull
     private Date comment_date;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "comment_id")
-    private UserEntity user_commented;
+    @OneToOne(mappedBy = "user_commented")
+    private UserEntity user_comments;
 
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = true)
