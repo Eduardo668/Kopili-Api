@@ -11,7 +11,7 @@ public class CommentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long comment_id;
+    private Long id;
 
     @NotNull
     @Lob
@@ -20,23 +20,25 @@ public class CommentEntity {
     @NotNull
     private Date comment_date;
 
-    @OneToOne(mappedBy = "user_commented")
-    private UserEntity user_comments;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference(value = "user-comment")
+    private CommentEntity user_comment;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = true)
-    @JsonBackReference
+    @JoinColumn(name = "post_id")
+    @JsonBackReference(value = "post-comment")
     private PostEntity postComments;
 
     public CommentEntity() {
     }
 
-    public Long getComment_id() {
-        return comment_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setComment_id(Long comment_id) {
-        this.comment_id = comment_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getContent() {
@@ -54,4 +56,21 @@ public class CommentEntity {
     public void setComment_date(Date comment_date) {
         this.comment_date = comment_date;
     }
+
+    public CommentEntity getUser_comment() {
+        return user_comment;
+    }
+
+    public void setUser_comment(CommentEntity user_comment) {
+        this.user_comment = user_comment;
+    }
+
+    public PostEntity getPostComments() {
+        return postComments;
+    }
+
+    public void setPostComments(PostEntity postComments) {
+        this.postComments = postComments;
+    }
+
 }

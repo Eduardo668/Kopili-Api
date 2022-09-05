@@ -12,7 +12,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    private Long id;
 
     @NotNull
     @Size(max = 100)
@@ -31,32 +31,45 @@ public class UserEntity {
     @Size(max = 100)
     private String email;
 
-
     @Size(max = 200)
     private String photo;
 
     @NotNull
     private int age;
 
-
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "comment_id")
-    private CommentEntity user_commented;
+    @OneToMany(mappedBy = "user_comment")
+    @JsonManagedReference(value = "user-comment")
+    private Set<CommentEntity> comments;
 
     @OneToMany(mappedBy = "post")
-    @JsonManagedReference
+    @JsonManagedReference(value = "user-post")
     private Set<PostEntity> user_posts;
 
     public UserEntity() {
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Set<CommentEntity> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<CommentEntity> comments) {
+        this.comments = comments;
+    }
+
+    public Set<PostEntity> getUser_posts() {
+        return user_posts;
+    }
+
+    public void setUser_posts(Set<PostEntity> user_posts) {
+        this.user_posts = user_posts;
     }
 
     public String getFullname() {
@@ -105,5 +118,20 @@ public class UserEntity {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", fullname='" + fullname + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", photo='" + photo + '\'' +
+                ", age=" + age +
+                ", user_commented=" + comments +
+                ", user_posts=" + user_posts +
+                '}';
     }
 }

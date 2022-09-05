@@ -40,9 +40,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Long user_id) {
+    public void deleteUser(Long id) {
         try {
-            Optional<UserEntity> user_data = userRepository.findById(user_id);
+            Optional<UserEntity> user_data = userRepository.findById(id);
 
             if (user_data == null){
                 throw new IllegalStateException("Este usuario não existe");
@@ -56,9 +56,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity editUser(UserEntity editedUser, Long user_id) {
+    public UserEntity editUser(UserEntity editedUser, Long id) {
         try {
-            return userRepository.findById(user_id).map(user -> {
+            return userRepository.findById(id).map(user -> {
                 user.setFullname(editedUser.getFullname());
                 user.setEmail(editedUser.getEmail());
                 user.setAge(editedUser.getAge());
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
                 user.setPhoto(editedUser.getPhoto());
                 return userRepository.save(user);
             }).orElseGet(() -> {
-                editedUser.setUser_id(user_id);
+                editedUser.setId(id);
                 return userRepository.save(editedUser);
             });
         } catch (Exception e){
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void makePost(Long user_id) {
+    public void makePost(Long id) {
 
     }
 }

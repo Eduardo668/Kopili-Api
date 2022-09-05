@@ -1,5 +1,6 @@
 package br.com.api.controllers;
 
+import org.springframework.http.MediaType;
 import br.com.api.models.UserEntity;
 import br.com.api.services.user_service.UserServiceImpl;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("user")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserServiceImpl userService;
@@ -18,9 +19,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/create")
+    // End-Point para a criação/cadastro de um usuario
+    @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Boolean> createUser(@RequestBody UserEntity user){
         try{
+
+            System.out.println(user);
             userService.createUser(user);
             return ResponseEntity.ok(true);
         }
@@ -30,11 +34,13 @@ public class UserController {
 
     }
 
+    // End-Point para visualizar todos os usuarios que estão cadastrados no banco de dados
     @GetMapping("/read")
     public ResponseEntity<List<UserEntity>> findAllUsers(){
         return ResponseEntity.ok(userService.findAllUsers());
     }
 
+    // End-Point para editar um usuario pelo id
     @PutMapping("/edit{user_id}")
     public ResponseEntity<UserEntity> editUser(@RequestBody UserEntity editedUser, @PathVariable Long user_id){
         try{
@@ -45,6 +51,7 @@ public class UserController {
         }
     }
 
+    // End-Point para deletar usuario pelo id
     @DeleteMapping("/delete{id}")
     public ResponseEntity<Boolean> deleteUser(@PathVariable("id") Long user_id){
         try{
