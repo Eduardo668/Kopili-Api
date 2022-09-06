@@ -1,6 +1,5 @@
 package br.com.api.controllers;
 
-import org.springframework.http.MediaType;
 import br.com.api.models.UserEntity;
 import br.com.api.services.user_service.UserServiceImpl;
 import org.springframework.http.ResponseEntity;

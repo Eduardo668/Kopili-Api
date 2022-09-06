@@ -1,8 +1,5 @@
 package br.com.api.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -18,29 +15,34 @@ public class PostEntity {
 
     @NotNull
     @Lob
+    private String image;
+
+    @NotNull
+    @Size(max = 500)
+    private String link;
+
+    @NotNull
+    @Size(max = 300)
     private String description;
 
     @Size(max = 100)
     @NotNull
     private String subject;
-
-    @Temporal(TemporalType.TIMESTAMP)
+0
+,    @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     private Date date;
 
     @OneToMany(mappedBy = "postComments")
-    
     private Set<CommentEntity> comments;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    
     private UserEntity post;
 
     public PostEntity() {
 
-    }
-
+    }    
 
     public Long getId() {
         return id;
