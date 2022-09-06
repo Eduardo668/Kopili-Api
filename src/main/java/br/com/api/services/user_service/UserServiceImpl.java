@@ -1,7 +1,10 @@
 package br.com.api.services.user_service;
 
+import br.com.api.models.PostEntity;
 import br.com.api.models.UserEntity;
 import br.com.api.repository.UserRepository;
+import br.com.api.services.post_service.PostServiceImpl;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +14,11 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PostServiceImpl postService;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PostServiceImpl postService) {
         this.userRepository = userRepository;
+        this.postService = postService;
     }
 
     @Override
@@ -23,7 +28,7 @@ public class UserServiceImpl implements UserService {
             UserEntity user_data  = userRepository.findByUsername(newUser.getUsername());
 
             if (user_data != null){
-                throw new IllegalStateException("Este username já existe");
+                throw new IllegalStateException("Este Username já está sendo usado.");
 
             }
 
@@ -46,7 +51,7 @@ public class UserServiceImpl implements UserService {
             Optional<UserEntity> user_data = userRepository.findById(id);
 
             if (user_data == null){
-                throw new IllegalStateException("Este usuario não existe");
+                throw new IllegalStateException("Este Usuário não existe.");
             }
 
             userRepository.delete(user_data.get());
@@ -62,7 +67,7 @@ public class UserServiceImpl implements UserService {
             return userRepository.findById(id).map(user -> {
                 user.setFullname(editedUser.getFullname());
                 user.setEmail(editedUser.getEmail());
-                user.setAge(editedUser.getAge());
+                user.setBorn(editedUser.getBorn());
                 user.setPassword(editedUser.getPassword());
                 user.setUsername(editedUser.getUsername());
                 user.setPhoto(editedUser.getPhoto());
@@ -72,7 +77,7 @@ public class UserServiceImpl implements UserService {
                 return userRepository.save(editedUser);
             });
         } catch (Exception e){
-            throw new RuntimeException("Deu Ruim", e);
+            throw new RuntimeException("Erro", e);
         }
 
     }
@@ -83,7 +88,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void makePost(Long id) {
+    public UserEntity makePost(Long user_id, PostEntity newPost) {
+        try {
+            Optional<UserEntity> user_data = userRepository.findById(user_id);
 
+            newPost.setUserPost(user_data.get());
+            PostEntity post_data = postService.createPost(newPost);
+            return user_data.get();
+        }catch (Exception e){
+            throw new RuntimeException("Falhou na ao fazer o post",e);
+        }
     }
 }

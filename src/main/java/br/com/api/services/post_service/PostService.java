@@ -12,10 +12,6 @@ public interface PostService {
 
    public PostEntity editPost(PostEntity editedPost, Long post_id);
 
-   public PostEntity deletePost(Long post_id);
-
-
-
-
+   public void deletePost(Long post_id);
 
 }

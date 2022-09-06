@@ -1,5 +1,6 @@
 package br.com.api.services.user_service;
 
+import br.com.api.models.PostEntity;
 import br.com.api.models.UserEntity;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface UserService {
 
     public void makeFriend(Long yourUser_id, Long friend_id);
 
-    public void makePost(Long user_id);
+    public UserEntity makePost(Long user_id, PostEntity newPost);
 
 
 }

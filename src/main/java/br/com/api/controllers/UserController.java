@@ -1,5 +1,6 @@
 package br.com.api.controllers;
 
+import br.com.api.models.PostEntity;
 import br.com.api.models.UserEntity;
 import br.com.api.services.user_service.UserServiceImpl;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +40,8 @@ public class UserController {
     }
 
     // End-Point para editar um usuario pelo id
-    @PutMapping("/edit{user_id}")
-    public ResponseEntity<UserEntity> editUser(@RequestBody UserEntity editedUser, @PathVariable Long user_id){
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<UserEntity> editUser(@RequestBody UserEntity editedUser, @PathVariable("id") Long user_id){
         try{
             return ResponseEntity.ok(userService.editUser(editedUser,user_id));
         }
@@ -50,7 +51,7 @@ public class UserController {
     }
 
     // End-Point para deletar usuario pelo id
-    @DeleteMapping("/delete{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> deleteUser(@PathVariable("id") Long user_id){
         try{
             userService.deleteUser(user_id);
@@ -60,4 +61,15 @@ public class UserController {
             throw new RuntimeException(e);
         }
     }
+
+    @PostMapping("/makePost/{id}")
+    public ResponseEntity<UserEntity> makePost(@RequestBody PostEntity newPost, @PathVariable("id") Long user_id){
+        try{
+            return ResponseEntity.ok(userService.makePost(user_id, newPost));
+        }
+        catch (Exception e){
+            throw new RuntimeException("RUIM", e);
+        }
+    }
+
 }

@@ -5,7 +5,9 @@ import br.com.api.models.PostEntity;
 import br.com.api.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostServiceImpl implements PostService{
@@ -20,6 +22,9 @@ public class PostServiceImpl implements PostService{
 	@Override
     public PostEntity createPost(PostEntity newPost) {
         try {
+            Date dataAtual = new Date();
+
+            newPost.setDate(dataAtual);
             return postRepository.save(newPost);
         }
         catch (Exception e){
@@ -35,27 +40,31 @@ public class PostServiceImpl implements PostService{
 	@Override
     public PostEntity editPost(PostEntity editedPost, Long id) {
         try {
-            return postRepository.findById(_id).map(post -> {
+            return postRepository.findById(id).map(post -> {
+                post.setLink(editedPost.getLink());
                 post.setDescription(editedPost.getDescription());
-                post.setAge(editedPost.getAge());
-                post.setPassword(editedPost.getPassword());
-                post.setUsername(editedPost.getUsername());
-                post.setPhoto(editedPost.getPhoto());
-                return postRepository.save(user);
+                post.setSubject(editedPost.getSubject());
+                return postRepository.save(post);
             }).orElseGet(() -> {
-                editedUser.setId(id);
-                return userRepository.save(editedUser);
+                editedPost.setId(id);
+                return postRepository.save(editedPost);
             });
         } catch (Exception e){
-            throw new RuntimeException("Deu Ruim", e);
+            throw new RuntimeException("Erro", e);
         }
 
     }
 
 	@Override
-	public PostEntity deletePost(PostEntity deletePost) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public void deletePost(Long id) {
+        try {
+            Optional<PostEntity> post_data = postRepository.findById(id);
+
+            postRepository.delete(post_data.get());
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
 
 }

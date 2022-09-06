@@ -6,18 +6,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import br.com.api.controllers.PostController;
 import br.com.api.models.PostEntity;
 import br.com.api.services.post_service.PostService;
 
 @RestController
+@RequestMapping("post")
 public class PostController{
 
     @Autowired
@@ -46,7 +41,7 @@ public class PostController{
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<PostEntity> editPost(@RequestBody PostEntity editedPost, @PathVariable Long post_id){
+    public ResponseEntity<PostEntity> editPost(@RequestBody PostEntity editedPost, @PathVariable("id") Long post_id){
         try{
             return ResponseEntity.ok(postService.editPost(editedPost, post_id));
         }
@@ -56,7 +51,7 @@ public class PostController{
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> deletePost(@PathVariable Long post_id){
+    public ResponseEntity<Boolean> deletePost(@PathVariable("id") Long post_id){
         try{
             postService.deletePost(post_id);
             return ResponseEntity.ok(true);

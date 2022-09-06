@@ -1,10 +1,13 @@
 package br.com.api.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -34,13 +37,15 @@ public class UserEntity {
     @Size(max = 200)
     private String photo;
 
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy") 
     @NotNull
-    private int age;
+    private Date born;
 
     @OneToMany(mappedBy = "user_comment") 
     private Set<CommentEntity> comments;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "userPost")
     private Set<PostEntity> user_posts;
 
     public UserEntity() {
@@ -110,12 +115,12 @@ public class UserEntity {
         this.photo = photo;
     }
 
-    public int getAge() {
-        return age;
+    public Date getBorn() {
+        return born;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBorn(Date born) {
+        this.born = born;
     }
 
     @Override
@@ -127,7 +132,7 @@ public class UserEntity {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", photo='" + photo + '\'' +
-                ", age=" + age +
+                ", age=" + born +
                 '}';
     }
 }

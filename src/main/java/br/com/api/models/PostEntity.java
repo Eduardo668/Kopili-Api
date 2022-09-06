@@ -3,6 +3,9 @@ package br.com.api.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import java.util.Set;
 
@@ -13,7 +16,7 @@ public class PostEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+
     @Lob
     private String image;
 
@@ -28,9 +31,10 @@ public class PostEntity {
     @Size(max = 100)
     @NotNull
     private String subject;
-0
-,    @Temporal(TemporalType.TIMESTAMP)
-    @NotNull
+
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/MM/yyyy") 
+	@NotNull
     private Date date;
 
     @OneToMany(mappedBy = "postComments")
@@ -38,43 +42,66 @@ public class PostEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserEntity post;
+    private UserEntity userPost;
 
     public PostEntity() {
 
-    }    
-
-    public Long getId() {
-        return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getSubject() {
-        return subject;
-    }
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
+	public String getLink() {
+		return link;
+	}
+	public void setLink(String link) {
+		this.link = link;
+	}
 
-    public Set<CommentEntity> getComments() {
-        return comments;
-    }
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setComments(Set<CommentEntity> comments) {
-        this.comments = comments;
-    }
+	public String getSubject() {
+		return subject;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
 
-    public UserEntity getPost() {
-        return post;
-    }
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
-    public void setPost(UserEntity post) {
-        this.post = post;
-    }
+	public Set<CommentEntity> getComments() {
+		return comments;
+	}
+	public void setComments(Set<CommentEntity> comments) {
+		this.comments = comments;
+	}
 
+	public UserEntity getUserPost() {
+		return userPost;
+	}
 
+	public void setUserPost(UserEntity userPost) {
+		this.userPost = userPost;
+	}
 }
