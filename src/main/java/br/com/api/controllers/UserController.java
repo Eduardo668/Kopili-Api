@@ -20,10 +20,9 @@ public class UserController {
     }
 
     // End-Point para a criação/cadastro de um usuario
-    @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping("/create")
     public ResponseEntity<Boolean> createUser(@RequestBody UserEntity user){
         try{
-
             System.out.println(user);
             userService.createUser(user);
             return ResponseEntity.ok(true);
@@ -62,9 +61,4 @@ public class UserController {
             throw new RuntimeException(e);
         }
     }
-
-
-
-    
-
 }

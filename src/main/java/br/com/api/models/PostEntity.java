@@ -29,12 +29,12 @@ public class PostEntity {
     private Date date;
 
     @OneToMany(mappedBy = "postComments")
-    @JsonManagedReference(value = "post-comment")
+    
     private Set<CommentEntity> comments;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference(value = "user-post")
+    
     private UserEntity post;
 
     public PostEntity() {

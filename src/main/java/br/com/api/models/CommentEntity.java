@@ -22,12 +22,11 @@ public class CommentEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference(value = "user-comment")
+    
     private CommentEntity user_comment;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    @JsonBackReference(value = "post-comment")
     private PostEntity postComments;
 
     public CommentEntity() {

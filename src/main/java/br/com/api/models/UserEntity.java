@@ -37,12 +37,10 @@ public class UserEntity {
     @NotNull
     private int age;
 
-    @OneToMany(mappedBy = "user_comment")
-    @JsonManagedReference(value = "user-comment")
+    @OneToMany(mappedBy = "user_comment") 
     private Set<CommentEntity> comments;
 
     @OneToMany(mappedBy = "post")
-    @JsonManagedReference(value = "user-post")
     private Set<PostEntity> user_posts;
 
     public UserEntity() {
@@ -130,8 +128,6 @@ public class UserEntity {
                 ", email='" + email + '\'' +
                 ", photo='" + photo + '\'' +
                 ", age=" + age +
-                ", user_commented=" + comments +
-                ", user_posts=" + user_posts +
                 '}';
     }
 }

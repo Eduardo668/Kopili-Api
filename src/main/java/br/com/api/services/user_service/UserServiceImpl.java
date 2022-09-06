@@ -24,9 +24,10 @@ public class UserServiceImpl implements UserService {
 
             if (user_data != null){
                 throw new IllegalStateException("Este username já existe");
+
             }
 
-            return userRepository.save(user_data);
+            return userRepository.save(newUser);
 
         }
         catch (Exception e){
