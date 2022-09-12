@@ -1,5 +1,6 @@
 package br.com.api.services.user_service;
 
+import br.com.api.models.CommentEntity;
 import br.com.api.models.PostEntity;
 import br.com.api.models.UserEntity;
 
@@ -19,5 +20,7 @@ public interface UserService {
 
     public UserEntity makePost(Long user_id, PostEntity newPost);
 
+    public UserEntity findUserByUsername(String username);
 
+    public UserEntity makeComment(Long user_id, CommentEntity newComment);
 }

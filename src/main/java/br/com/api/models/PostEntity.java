@@ -6,6 +6,8 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.Date;
 import java.util.Set;
 
@@ -35,13 +37,14 @@ public class PostEntity {
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy") 
 	@NotNull
-    private Date date;
+    private Date post_date;
 
     @OneToMany(mappedBy = "postComments")
     private Set<CommentEntity> comments;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+	@JsonBackReference
     private UserEntity userPost;
 
     public PostEntity() {
@@ -84,10 +87,10 @@ public class PostEntity {
 	}
 
 	public Date getDate() {
-		return date;
+		return post_date;
 	}
 	public void setDate(Date date) {
-		this.date = date;
+		this.post_date = date;
 	}
 
 	public Set<CommentEntity> getComments() {

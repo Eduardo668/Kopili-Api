@@ -7,6 +7,8 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Date;
 import java.util.Set;
 
@@ -43,10 +45,14 @@ public class UserEntity {
     private Date born;
 
     @OneToMany(mappedBy = "user_comment") 
+    @JsonManagedReference
     private Set<CommentEntity> comments;
 
     @OneToMany(mappedBy = "userPost")
+    @JsonManagedReference
     private Set<PostEntity> user_posts;
+
+
 
     public UserEntity() {
     }

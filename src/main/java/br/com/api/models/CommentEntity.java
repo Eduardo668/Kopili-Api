@@ -2,6 +2,10 @@ package br.com.api.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.Date;
 
 @Entity(name = "Comentario")
@@ -12,7 +16,7 @@ public class CommentEntity {
     private Long id;
 
     @NotNull
-    @Lob
+    @Size(max = 200)
     private String content;
 
     @NotNull
@@ -20,11 +24,12 @@ public class CommentEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    
+    @JsonBackReference
     private CommentEntity user_comment;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
+    @JsonBackReference
     private PostEntity postComments;
 
     public CommentEntity() {

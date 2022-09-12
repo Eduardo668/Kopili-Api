@@ -1,14 +1,17 @@
 package br.com.api.services.user_service;
 
+import br.com.api.models.CommentEntity;
 import br.com.api.models.PostEntity;
 import br.com.api.models.UserEntity;
 import br.com.api.repository.UserRepository;
 import br.com.api.services.post_service.PostServiceImpl;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -91,12 +94,47 @@ public class UserServiceImpl implements UserService {
     public UserEntity makePost(Long user_id, PostEntity newPost) {
         try {
             Optional<UserEntity> user_data = userRepository.findById(user_id);
+            if(user_data.isEmpty()){
+                throw new RuntimeException("Deu ruim");
+            }
+
+            Set<PostEntity> postEntities = new HashSet<>();
+            postEntities.add(newPost);
 
             newPost.setUserPost(user_data.get());
-            PostEntity post_data = postService.createPost(newPost);
+
+            postService.createPost(newPost);
             return user_data.get();
+          
         }catch (Exception e){
             throw new RuntimeException("Falhou na ao fazer o post",e);
         }
     }
+
+    @Override
+    public UserEntity findUserByUsername(String username) {
+        UserEntity user = userRepository.findByUsername(username);
+        return user;
+    }
+
+	@Override
+	public UserEntity makeComment(Long user_id, CommentEntity newComment) {
+		try {
+            Optional<UserEntity> user_data = userRepository.findById(user_id);
+            if(user_data.isEmpty()){
+                throw new RuntimeException("Erro");
+            }
+
+            Set<PostEntity> commentEntities = new HashSet<>();
+            commentEntities.add(newComment);
+
+            newComment.setUserComment(user_data.get());
+
+            commentService.createComment(newComment);
+            return user_data.get();
+          
+        }catch (Exception e){
+            throw new RuntimeException("Falhou ao fazer o comentário",e);
+        }
+	}
 }

@@ -3,6 +3,8 @@ package br.com.api.controllers;
 import br.com.api.models.PostEntity;
 import br.com.api.models.UserEntity;
 import br.com.api.services.user_service.UserServiceImpl;
+
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +41,10 @@ public class UserController {
         return ResponseEntity.ok(userService.findAllUsers());
     }
 
+    @GetMapping("/read/{username}")
+    public ResponseEntity<UserEntity> findUser(@PathVariable("username") String username){
+        return ResponseEntity.ok(userService.findUserByUsername(username));
+    }
     // End-Point para editar um usuario pelo id
     @PutMapping("/edit/{id}")
     public ResponseEntity<UserEntity> editUser(@RequestBody UserEntity editedUser, @PathVariable("id") Long user_id){

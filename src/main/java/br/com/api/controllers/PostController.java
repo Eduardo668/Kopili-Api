@@ -23,7 +23,7 @@ public class PostController{
 	// 	return ResponseEntity.ok(postRepository.findAll());
 	// }
 
-    @GetMapping("/list")
+    @GetMapping("/read")
     public ResponseEntity<List<PostEntity>> findAllPost(){
         return ResponseEntity.ok(postService.findAllPost());
     }
