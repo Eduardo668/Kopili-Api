@@ -1,9 +1,11 @@
 package br.com.api.services.user_service;
 
 import br.com.api.models.CommentEntity;
+import br.com.api.models.Friendship;
 import br.com.api.models.PostEntity;
 import br.com.api.models.UserEntity;
 import br.com.api.repository.UserRepository;
+import br.com.api.services.friendship_service.FriendshipServiceImpl;
 import br.com.api.services.post_service.PostServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +21,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PostServiceImpl postService;
 
-    public UserServiceImpl(UserRepository userRepository, PostServiceImpl postService) {
+    private final FriendshipServiceImpl friendshipService;
+
+    public UserServiceImpl(UserRepository userRepository, PostServiceImpl postService, FriendshipServiceImpl friendshipService) {
         this.userRepository = userRepository;
         this.postService = postService;
+        this.friendshipService = friendshipService;
     }
+
 
     @Override
     public UserEntity createUser(UserEntity newUser) {
@@ -87,7 +93,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void makeFriend(Long yourUser_id, Long friend_id) {
+          try {
+              Optional<UserEntity> user1_data = userRepository.findById(yourUser_id);
+              Optional<UserEntity> user2_data = userRepository.findById(friend_id);
 
+              if (user1_data.isEmpty()){
+                  throw new RuntimeException("Error com user 1");
+              } else if (user2_data.isEmpty()) {
+                  throw new RuntimeException("Error com user 2");
+              }
+
+              Friendship friendshipObject = new Friendship();
+
+              friendshipObject.setUser1(user1_data.get().getId());
+              friendshipObject.setUser2(user2_data.get().getId());
+
+
+
+
+
+
+
+
+
+          }
     }
 
     @Override

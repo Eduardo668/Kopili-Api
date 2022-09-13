@@ -52,6 +52,10 @@ public class UserEntity {
     @JsonManagedReference
     private Set<PostEntity> user_posts;
 
+    @OneToMany(mappedBy = "userFriend")
+    @JsonManagedReference
+    private Set<Friendship> friends_list;
+
 
 
     public UserEntity() {
