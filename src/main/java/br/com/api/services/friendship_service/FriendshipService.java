@@ -2,14 +2,14 @@ package br.com.api.services.friendship_service;
 
 import java.util.List;
 
-import br.com.api.models.Friendship;
+import br.com.api.models.FriendshipEntity;
 
 public interface FriendshipService {
     
-    public Friendship createFriendship(Friendship newFriendship);
+    public FriendshipEntity createFriendship(FriendshipEntity newFriendship);
 
-    public List<Friendship> findAll();
+    public List<FriendshipEntity> findAll();
 
-    public Friendship removeFriendship(Long friendship_id);
+    public FriendshipEntity removeFriendship(Long friendship_id);
 
 }

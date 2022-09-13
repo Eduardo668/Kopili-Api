@@ -16,7 +16,7 @@ public class CommentEntity {
     private Long id;
 
     @NotNull
-    @Size(max = 200)
+    @Size(max = 300)
     private String content;
 
     @NotNull
@@ -24,12 +24,12 @@ public class CommentEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference
-    private CommentEntity user_comment;
+//    @JsonBackReference
+    private UserEntity user_comment;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    @JsonBackReference
+//    @JsonBackReference
     private PostEntity postComments;
 
     public CommentEntity() {
@@ -59,11 +59,11 @@ public class CommentEntity {
         this.comment_date = comment_date;
     }
 
-    public CommentEntity getUser_comment() {
+    public UserEntity getUser_comment() {
         return user_comment;
     }
 
-    public void setUser_comment(CommentEntity user_comment) {
+    public void setUser_comment(UserEntity user_comment) {
         this.user_comment = user_comment;
     }
 

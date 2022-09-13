@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import br.com.api.models.Friendship;
+import br.com.api.models.FriendshipEntity;
 import br.com.api.repository.FriendshipRepository;
 
 @Service
@@ -18,7 +18,7 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     @Override
-    public Friendship createFriendship(Friendship newFriendship) {
+    public FriendshipEntity createFriendship(FriendshipEntity newFriendship) {
         try{
             return friendshipRepository.save(newFriendship);
         }
@@ -28,14 +28,14 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     @Override
-    public List<Friendship> findAll() {
+    public List<FriendshipEntity> findAll() {
         return friendshipRepository.findAll();
     }
 
     @Override
-    public Friendship removeFriendship(Long friendship_id) {
+    public FriendshipEntity removeFriendship(Long friendship_id) {
         try {
-            Optional<Friendship> friendship_opt = friendshipRepository.findById(friendship_id);
+            Optional<FriendshipEntity> friendship_opt = friendshipRepository.findById(friendship_id);
             if(friendship_opt.isEmpty()){
                   throw new RuntimeException("Deu Ruim ao remover a friendship");
             }

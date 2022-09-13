@@ -1,12 +1,13 @@
 package br.com.api.services.user_service;
 
 import br.com.api.models.CommentEntity;
-import br.com.api.models.Friendship;
+import br.com.api.models.FriendshipEntity;
 import br.com.api.models.PostEntity;
 import br.com.api.models.UserEntity;
 import br.com.api.repository.UserRepository;
 import br.com.api.services.friendship_service.FriendshipServiceImpl;
 import br.com.api.services.post_service.PostServiceImpl;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 
@@ -103,19 +104,30 @@ public class UserServiceImpl implements UserService {
                   throw new RuntimeException("Error com user 2");
               }
 
-              Friendship friendshipObject = new Friendship();
+              FriendshipEntity friendshipObject = new FriendshipEntity();
 
-              friendshipObject.setUser1(user1_data.get().getId());
-              friendshipObject.setUser2(user2_data.get().getId());
+              Set<UserEntity> userArrayForSave = new HashSet<>();
+
+              userArrayForSave.add(user1_data.get());
+              userArrayForSave.add(user2_data.get());
+
+              friendshipObject.setUserFriend(userArrayForSave);
+
+//              friendshipObject.setUser1(user1_data.get().getId());
+//              friendshipObject.setUser2(user2_data.get().getId());
+//
+
+              FriendshipEntity created_friendship = friendshipService.createFriendship(friendshipObject);
+
+
+//              UserEntity user1_entity = editUser(user1_data.get(),user1_data.get().getId());
+//              UserEntity user2_entity = editUser(user2_data.get(),user2_data.get().getId());
 
 
 
 
-
-
-
-
-
+          }catch (Exception e){
+              throw new RuntimeException("Deu ruim ao makar a friend", e);
           }
     }
 
@@ -146,24 +158,24 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-	@Override
-	public UserEntity makeComment(Long user_id, CommentEntity newComment) {
-		try {
-            Optional<UserEntity> user_data = userRepository.findById(user_id);
-            if(user_data.isEmpty()){
-                throw new RuntimeException("Erro");
-            }
-
-            Set<PostEntity> commentEntities = new HashSet<>();
-            commentEntities.add(newComment);
-
-            newComment.setUserComment(user_data.get());
-
-            commentService.createComment(newComment);
-            return user_data.get();
-          
-        }catch (Exception e){
-            throw new RuntimeException("Falhou ao fazer o comentário",e);
-        }
-	}
+//	@Override
+//	public UserEntity makeComment(Long user_id, CommentEntity newComment) {
+//		try {
+//            Optional<UserEntity> user_data = userRepository.findById(user_id);
+//            if(user_data.isEmpty()){
+//                throw new RuntimeException("Erro");
+//            }
+//
+//            Set<PostEntity> commentEntities = new HashSet<>();
+//            commentEntities.add(newComment);
+//
+//            newComment.setUserComment(user_data.get());
+//
+//            commentService.createComment(newComment);
+//            return user_data.get();
+//
+//        }catch (Exception e){
+//            throw new RuntimeException("Falhou ao fazer o comentário",e);
+//        }
+//	}
 }

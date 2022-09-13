@@ -78,4 +78,15 @@ public class UserController {
         }
     }
 
+    @PostMapping("/makeFriend/user1_id={user1_id}/user2_id={user2_id}")
+    public ResponseEntity<String> makeFriend(@PathVariable("user1_id") Long user1,
+                                             @PathVariable("user2_id") Long user2){
+        try {
+            userService.makeFriend(user1, user2);
+            return ResponseEntity.ok("AMIZADE criada com sucesso");
+        }catch (Exception e){
+            throw new RuntimeException("Ruim", e);
+        }
+    }
+
 }

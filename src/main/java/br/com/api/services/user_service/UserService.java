@@ -22,5 +22,5 @@ public interface UserService {
 
     public UserEntity findUserByUsername(String username);
 
-    public UserEntity makeComment(Long user_id, CommentEntity newComment);
+//    public UserEntity makeComment(Long user_id, CommentEntity newComment);
 }

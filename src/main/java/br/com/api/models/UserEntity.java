@@ -45,18 +45,24 @@ public class UserEntity {
     private Date born;
 
     @OneToMany(mappedBy = "user_comment") 
-    @JsonManagedReference
+//    @JsonManagedReference
     private Set<CommentEntity> comments;
 
     @OneToMany(mappedBy = "userPost")
     @JsonManagedReference
     private Set<PostEntity> user_posts;
 
-    @OneToMany(mappedBy = "userFriend")
-    @JsonManagedReference
-    private Set<Friendship> friends_list;
+    @ManyToMany(mappedBy = "userFriend")
+//    @JsonManagedReference
+    private Set<FriendshipEntity> friends_list;
 
+    public Set<FriendshipEntity> getFriends_list() {
+        return friends_list;
+    }
 
+    public void setFriends_list(Set<FriendshipEntity> friends_list) {
+        this.friends_list = friends_list;
+    }
 
     public UserEntity() {
     }
@@ -142,7 +148,7 @@ public class UserEntity {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", photo='" + photo + '\'' +
-                ", age=" + born +
+                ", born=" + born +
                 '}';
     }
 }
