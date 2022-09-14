@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -69,13 +70,13 @@ public class UserEntity implements Serializable {
     //@JsonIgnore
     @ManyToMany(mappedBy = "userFriend")
     //@JsonManagedReference
-    private Set<FriendshipEntity> friends_list;
+    private List<FriendshipEntity> friends_list;
 
-    public Set<FriendshipEntity> getFriends_list() {
+    public List<FriendshipEntity> getFriends_list() {
         return friends_list;
     }
 
-    public void setFriends_list(Set<FriendshipEntity> friends_list) {
+    public void setFriends_list(List<FriendshipEntity> friends_list) {
         this.friends_list = friends_list;
     }
 
@@ -163,7 +164,7 @@ public class UserEntity implements Serializable {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", photo='" + photo + '\'' +
-                ", born=" + born
+                ", born=" + born +
                 '}';
     }
 }

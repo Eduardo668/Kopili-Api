@@ -22,7 +22,7 @@ public interface UserService {
 
     public UserEntity findUserByUsername(String username);
 
-    public void findAllUserFriends(Long user_id);
+    public List<UserEntity> findAllUserFriends(Long user_id);
 
 //    public UserEntity makeComment(Long user_id, CommentEntity newComment);
 }

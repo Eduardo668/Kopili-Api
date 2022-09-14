@@ -11,10 +11,7 @@ import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -106,28 +103,22 @@ public class UserServiceImpl implements UserService {
 
               FriendshipEntity friendshipObject = new FriendshipEntity();
 
-              friendshipObject.setUser1(yourUser_id);
-              friendshipObject.setUser2(friend_id);
+              friendshipObject.setUser1(friend_id);
+//              friendshipObject.setUser2(friend_id);
 
               Set<UserEntity> userArrayForSave = new HashSet<>();
 
               userArrayForSave.add(user1_data.get());
-              userArrayForSave.add(user2_data.get());
+//              userArrayForSave.add(user2_data.get());
 
               friendshipObject.setUserFriend(userArrayForSave);
-
 
 
               friendshipService.createFriendship(friendshipObject);
 
 
-
-
-
 //              UserEntity user1_entity = editUser(user1_data.get(),user1_data.get().getId());
 //              UserEntity user2_entity = editUser(user2_data.get(),user2_data.get().getId());
-
-
 
 
           }catch (Exception e){
@@ -163,12 +154,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void findAllUserFriends(Long user_id) {
+    public List<UserEntity> findAllUserFriends(Long user_id) {
         Optional<UserEntity> user_data = userRepository.findById(user_id);
-        Set<FriendshipEntity> friendship_list = user_data.get().getFriends_list();
-        System.out.println(friendship_list);
+        List<FriendshipEntity> friendship_list = user_data.get().getFriends_list();
+        ArrayList<UserEntity> user_friends = new ArrayList<>();
 
+        for (FriendshipEntity friendship: friendship_list) {
+            Optional<UserEntity> user1 = userRepository.findById(friendship.getUser1());
+            user_friends.add(user1.get());
+        }
 
+//        System.out.println(friendship_list);
+        return user_friends;
 
     }
 

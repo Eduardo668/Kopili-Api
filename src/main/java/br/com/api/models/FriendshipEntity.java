@@ -21,8 +21,8 @@ public class FriendshipEntity implements Serializable {
     private Long user1;
 
 
-    @NotNull
-    private Long user2;
+//    @NotNull
+//    private Long user2;
 
     @JsonIgnore
     @ManyToMany
@@ -71,13 +71,13 @@ public class FriendshipEntity implements Serializable {
         this.user1 = user1;
     }
 
-    public Long getUser2() {
-        return user2;
-    }
-
-    public void setUser2(Long user2) {
-        this.user2 = user2;
-    }
+//    public Long getUser2() {
+//        return user2;
+//    }
+//
+//    public void setUser2(Long user2) {
+//        this.user2 = user2;
+//    }
 
     public Set<UserEntity> getUserFriend() {
         return userFriend;
@@ -92,7 +92,7 @@ public class FriendshipEntity implements Serializable {
         return "FriendshipEntity{" +
                 "id=" + id +
                 ", user1=" + user1 +
-                ", user2=" + user2 +
+//                ", user2=" + user2 +
                 '}';
     }
 }
