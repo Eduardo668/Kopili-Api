@@ -5,16 +5,19 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
-public class UserEntity {
+public class UserEntity implements Serializable {
 
+    private static final long serialVersionUID = -6315870526453041934L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -52,8 +55,20 @@ public class UserEntity {
     @JsonManagedReference
     private Set<PostEntity> user_posts;
 
+//    @OneToMany(mappedBy = "friend")
+//    private Set<FriendshipEntity> friends_list;
+//
+//    public Set<FriendshipEntity> getFriends_list() {
+//        return friends_list;
+//    }
+//
+//    public void setFriends_list(Set<FriendshipEntity> friends_list) {
+//        this.friends_list = friends_list;
+//    }
+
+    //@JsonIgnore
     @ManyToMany(mappedBy = "userFriend")
-//    @JsonManagedReference
+    //@JsonManagedReference
     private Set<FriendshipEntity> friends_list;
 
     public Set<FriendshipEntity> getFriends_list() {
@@ -148,7 +163,7 @@ public class UserEntity {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", photo='" + photo + '\'' +
-                ", born=" + born +
+                ", born=" + born
                 '}';
     }
 }

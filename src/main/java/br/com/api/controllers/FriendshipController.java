@@ -3,9 +3,7 @@ package br.com.api.controllers;
 import br.com.api.models.FriendshipEntity;
 import br.com.api.services.friendship_service.FriendshipServiceImpl;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,6 +20,17 @@ public class FriendshipController {
     @GetMapping("read")
     public ResponseEntity<List<FriendshipEntity>> findAllFriendships(){
         return ResponseEntity.ok(friendshipService.findAll());
+    }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<String> deleteFriendship(@PathVariable("id") Long friendship_id){
+        try {
+            friendshipService.removeFriendship(friendship_id);
+            return ResponseEntity.ok("Friendship deletado com sucesso");
+        }
+        catch (Exception e){
+            throw new RuntimeException("Erro ao deletar o user", e);
+        }
     }
 
 }

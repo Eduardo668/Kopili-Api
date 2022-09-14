@@ -106,6 +106,9 @@ public class UserServiceImpl implements UserService {
 
               FriendshipEntity friendshipObject = new FriendshipEntity();
 
+              friendshipObject.setUser1(yourUser_id);
+              friendshipObject.setUser2(friend_id);
+
               Set<UserEntity> userArrayForSave = new HashSet<>();
 
               userArrayForSave.add(user1_data.get());
@@ -113,11 +116,12 @@ public class UserServiceImpl implements UserService {
 
               friendshipObject.setUserFriend(userArrayForSave);
 
-//              friendshipObject.setUser1(user1_data.get().getId());
-//              friendshipObject.setUser2(user2_data.get().getId());
-//
 
-              FriendshipEntity created_friendship = friendshipService.createFriendship(friendshipObject);
+
+              friendshipService.createFriendship(friendshipObject);
+
+
+
 
 
 //              UserEntity user1_entity = editUser(user1_data.get(),user1_data.get().getId());
@@ -156,6 +160,16 @@ public class UserServiceImpl implements UserService {
     public UserEntity findUserByUsername(String username) {
         UserEntity user = userRepository.findByUsername(username);
         return user;
+    }
+
+    @Override
+    public void findAllUserFriends(Long user_id) {
+        Optional<UserEntity> user_data = userRepository.findById(user_id);
+        Set<FriendshipEntity> friendship_list = user_data.get().getFriends_list();
+        System.out.println(friendship_list);
+
+
+
     }
 
 //	@Override

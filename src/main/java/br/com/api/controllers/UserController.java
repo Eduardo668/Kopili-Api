@@ -89,4 +89,10 @@ public class UserController {
         }
     }
 
+    @GetMapping("readUserFriends/{user_id}")
+    public ResponseEntity<String> findAllUserFriends(@PathVariable("user_id") Long user_id){
+        userService.findAllUserFriends(user_id);
+        return ResponseEntity.ok("ISSO AI");
+    }
+
 }
