@@ -56,16 +56,6 @@ public class UserEntity implements Serializable {
     @JsonManagedReference
     private Set<PostEntity> user_posts;
 
-//    @OneToMany(mappedBy = "friend")
-//    private Set<FriendshipEntity> friends_list;
-//
-//    public Set<FriendshipEntity> getFriends_list() {
-//        return friends_list;
-//    }
-//
-//    public void setFriends_list(Set<FriendshipEntity> friends_list) {
-//        this.friends_list = friends_list;
-//    }
 
     //@JsonIgnore
     @ManyToMany(mappedBy = "userFriend")

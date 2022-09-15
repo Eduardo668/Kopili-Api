@@ -24,5 +24,5 @@ public interface UserService {
 
     public List<UserEntity> findAllUserFriends(Long user_id);
 
-//    public UserEntity makeComment(Long user_id, CommentEntity newComment);
+    public UserEntity makeComment(Long user_id, CommentEntity newComment);
 }

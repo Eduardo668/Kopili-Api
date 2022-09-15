@@ -21,31 +21,11 @@ public class FriendshipEntity implements Serializable {
     private Long user1;
 
 
-//    @NotNull
-//    private Long user2;
-
     @JsonIgnore
     @ManyToMany
-//    @JoinTable(
-//            name = "friend_user",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "friend_id")
-//    )
-    //@JsonBackReference
     private Set<UserEntity> userFriend;
 
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private UserEntity friend;
-
-//    public UserEntity getFriend() {
-//        return friend;
-//    }
-//
-//    public void setFriend(UserEntity friend) {
-//        this.friend = friend;
-//    }
 
     public Long getId() {
         return id;
@@ -55,13 +35,6 @@ public class FriendshipEntity implements Serializable {
         this.id = id;
     }
 
-//    public Long getUserfriend_id() {
-//        return userfriend_id;
-//    }
-//
-//    public void setUserfriend_id(Long userfriend_id) {
-//        this.userfriend_id = userfriend_id;
-//    }
 
     public Long getUser1() {
         return user1;
@@ -71,13 +44,7 @@ public class FriendshipEntity implements Serializable {
         this.user1 = user1;
     }
 
-//    public Long getUser2() {
-//        return user2;
-//    }
-//
-//    public void setUser2(Long user2) {
-//        this.user2 = user2;
-//    }
+
 
     public Set<UserEntity> getUserFriend() {
         return userFriend;

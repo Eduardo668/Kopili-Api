@@ -94,4 +94,13 @@ public class UserController {
         return ResponseEntity.ok(userService.findAllUserFriends(user_id));
     }
 
+    @PostMapping("/makeComment/{id}")
+    public ResponseEntity<UserEntity> makeComment(@RequestBody CommentEntity newComment, @PathVariable ("id") Long user_id){
+        try{
+            return ResponseEntity.ok(userService.makeComment(user_id, newComment));
+        }
+        catch (Exception e){
+            throw new RuntimeException("Erro", e);
+        }
+    }
 }
