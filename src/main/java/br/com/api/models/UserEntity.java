@@ -5,7 +5,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -60,13 +59,13 @@ public class UserEntity implements Serializable {
     //@JsonIgnore
     @ManyToMany(mappedBy = "userFriend")
     //@JsonManagedReference
-    private List<FriendshipEntity> friends_list;
+    private List<FollowerEntity> friends_list;
 
-    public List<FriendshipEntity> getFriends_list() {
+    public List<FollowerEntity> getFriends_list() {
         return friends_list;
     }
 
-    public void setFriends_list(List<FriendshipEntity> friends_list) {
+    public void setFriends_list(List<FollowerEntity> friends_list) {
         this.friends_list = friends_list;
     }
 

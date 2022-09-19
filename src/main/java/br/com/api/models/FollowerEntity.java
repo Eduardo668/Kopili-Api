@@ -1,8 +1,6 @@
 package br.com.api.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.catalina.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,7 +8,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-public class FriendshipEntity implements Serializable {
+public class FollowerEntity implements Serializable {
 
     private static final long serialVersionUID = -6315870426453041934L;
     @Id

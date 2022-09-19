@@ -1,6 +1,7 @@
 package br.com.api.controllers;
 
 import br.com.api.models.PostEntity;
+import br.com.api.models.CommentEntity;
 import br.com.api.models.UserEntity;
 import br.com.api.services.user_service.UserServiceImpl;
 
@@ -82,7 +83,7 @@ public class UserController {
     public ResponseEntity<String> makeFriend(@PathVariable("user1_id") Long user1,
                                              @PathVariable("user2_id") Long user2){
         try {
-            userService.makeFriend(user1, user2);
+            userService.follow(user1, user2);
             return ResponseEntity.ok("AMIZADE criada com sucesso");
         }catch (Exception e){
             throw new RuntimeException("Ruim", e);
@@ -91,7 +92,7 @@ public class UserController {
 
     @GetMapping("readUserFriends/{user_id}")
     public ResponseEntity<List<UserEntity>> findAllUserFriends(@PathVariable("user_id") Long user_id){
-        return ResponseEntity.ok(userService.findAllUserFriends(user_id));
+        return ResponseEntity.ok(userService.findAllFollowedUsers(user_id));
     }
 
     @PostMapping("/makeComment/{id}")

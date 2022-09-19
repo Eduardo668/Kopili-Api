@@ -7,6 +7,7 @@ import br.com.api.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 // import java.util.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,9 +24,8 @@ public class CommentServiceImpl implements CommentService{
 	@Override
     public CommentEntity createComment(CommentEntity newComment) {
         try {
-            // Date dataAtual = new Date();
-            // newComment.setDate(dataAtual);
-
+             Date dataAtual = new Date();
+             newComment.setComment_date(dataAtual);
             return commentRepository.save(newComment);
         }
         catch (Exception e){

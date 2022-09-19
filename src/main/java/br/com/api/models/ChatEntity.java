@@ -7,7 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
- 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 @Entity
 public class ChatEntity {
     
@@ -15,16 +17,17 @@ public class ChatEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Size(max = 200)
+    private String person1_username;
 
-    private Long user1;
-
-    private Long user2;
+    @NotNull
+    @Size(max = 200)
+    private String person2_username;
     
-    @OneToMany(mappedBy = "chat")
+    @OneToMany(mappedBy = "message_chat")
     private Set<MessageEntity> messages;
-    
 
-    
     public Long getId() {
         return id;
     }
@@ -33,23 +36,21 @@ public class ChatEntity {
         this.id = id;
     }
 
-    public Long getUser1() {
-        return user1;
+    public String getPerson1_username() {
+        return person1_username;
     }
 
-    public void setUser1(Long user1) {
-        this.user1 = user1;
+    public void setPerson1_username(String person1_username) {
+        this.person1_username = person1_username;
     }
 
-    public Long getUser2() {
-        return user2;
+    public String getPerson2_username() {
+        return person2_username;
     }
 
-    public void setUser2(Long user2) {
-        this.user2 = user2;
+    public void setPerson2_username(String person2_username) {
+        this.person2_username = person2_username;
     }
-
-    
 
     public Set<MessageEntity> getMessages() {
         return messages;
@@ -58,11 +59,4 @@ public class ChatEntity {
     public void setMessages(Set<MessageEntity> messages) {
         this.messages = messages;
     }
-    
-    @Override
-    public String toString() {
-        return "Chat [id=" + id + ", user1=" + user1 + ", user2=" + user2 + "]";
-    }
-    
-
 }
