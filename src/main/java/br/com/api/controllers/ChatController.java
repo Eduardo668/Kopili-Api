@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("chat")
 public class ChatController {
 
-    public void createAChat(){
-
-    }
+   
 
 }

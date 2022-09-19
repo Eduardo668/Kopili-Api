@@ -204,7 +204,7 @@ public class UserServiceImpl implements UserService {
             if (user1.isEmpty()){
                 throw new RuntimeException("Este usuario não existe");
             }
-            else if (user2.isEmpty()){
+            if (user2.isEmpty()){
                 throw new RuntimeException("Este usuario não existe");
             }
 
@@ -212,7 +212,8 @@ public class UserServiceImpl implements UserService {
 
             chat.setPerson1_username(user1.get().getUsername());
             chat.setPerson2_username(user2.get().getUsername());
-
+            System.out.println("Passou aqui fera");
+            System.out.println(chat);
            return chatService.createChat(chat);
 
         }

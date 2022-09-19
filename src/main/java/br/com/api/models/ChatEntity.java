@@ -10,6 +10,9 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class ChatEntity {
     
@@ -58,5 +61,11 @@ public class ChatEntity {
 
     public void setMessages(Set<MessageEntity> messages) {
         this.messages = messages;
+    }
+
+    @Override
+    public String toString() {
+        return "ChatEntity [id=" + id + ", person1_username=" + person1_username + ", person2_username="
+                + person2_username + "]";
     }
 }

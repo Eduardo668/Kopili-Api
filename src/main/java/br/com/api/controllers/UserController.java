@@ -1,6 +1,7 @@
 package br.com.api.controllers;
 
 import br.com.api.models.PostEntity;
+import br.com.api.models.ChatEntity;
 import br.com.api.models.CommentEntity;
 import br.com.api.models.UserEntity;
 import br.com.api.services.user_service.UserServiceImpl;
@@ -104,4 +105,18 @@ public class UserController {
             throw new RuntimeException("Erro", e);
         }
     }
+
+    @PostMapping("/startChat/user1_id={user1_id}/user2_id={user2_id}")
+    public ResponseEntity<ChatEntity> startChat(@PathVariable("user1_id") Long user1_id,
+                                      @PathVariable("user2_id") Long user2_id){
+            
+        try{
+            return ResponseEntity.ok(userService.startChat(user1_id, user2_id));
+        }
+        catch(Exception e){
+            throw new RuntimeException("Ocorreu um erro na requisição para criar o chat", e);
+        }
+
+    }
+
 }
