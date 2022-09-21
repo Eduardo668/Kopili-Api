@@ -19,11 +19,17 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public ChatEntity createChat(ChatEntity newChat) {
         try {
-            Optional<ChatEntity> chat_data = chatRepository.findById(newChat.getId());
-            if(chat_data.isPresent()){
-                throw new RuntimeException("Este chat ja existe");
+            // Optional<ChatEntity> chat_data = chatRepository.findById(newChat.getId());
+            // if(chat_data.isPresent()){
+            //     throw new RuntimeException("Este chat ja existe");
+            // }
+            if( newChat.getId() == null) {
+                return chatRepository.save(newChat);
+            } else {
+                throw new RuntimeException("O chat ja existe");
             }
-            return chatRepository.save(newChat);
+            
+            
         }
         catch (Exception e){
             throw new RuntimeException("Ocorreu algum erro ao criar o chat", e);
