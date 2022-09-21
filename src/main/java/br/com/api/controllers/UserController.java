@@ -80,8 +80,8 @@ public class UserController {
         }
     }
 
-    @PostMapping("/makeFriend/user1_id={user1_id}/user2_id={user2_id}")
-    public ResponseEntity<String> makeFriend(@PathVariable("user1_id") Long user1,
+    @PostMapping("/followSomeone/user1_id={user1_id}/user2_id={user2_id}")
+    public ResponseEntity<String> followSomeone(@PathVariable("user1_id") Long user1,
                                              @PathVariable("user2_id") Long user2){
         try {
             userService.follow(user1, user2);
@@ -91,8 +91,8 @@ public class UserController {
         }
     }
 
-    @GetMapping("readUserFriends/{user_id}")
-    public ResponseEntity<List<UserEntity>> findAllUserFriends(@PathVariable("user_id") Long user_id){
+    @GetMapping("readUserFollowed/{user_id}")
+    public ResponseEntity<List<UserEntity>> findAllUserFollowed(@PathVariable("user_id") Long user_id){
         return ResponseEntity.ok(userService.findAllFollowedUsers(user_id));
     }
 
@@ -118,5 +118,18 @@ public class UserController {
         }
 
     }
+
+    @PostMapping("/sendMessage/chat_id={chat_id}")
+    public ResponseEntity<ChatEntity> sendMessage(@RequestBody String message,
+                                                  @PathVariable("chat_id") Long chat_id){
+        try {
+            return ResponseEntity.ok(userService.sendMessage(message, chat_id));
+        }
+        catch (Exception e){
+            throw new RuntimeException("Erro a fazer a requisição para o envio da mensagem");
+        }
+    }
+
+
 
 }

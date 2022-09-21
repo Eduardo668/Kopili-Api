@@ -4,6 +4,7 @@ import br.com.api.models.*;
 import br.com.api.repository.UserRepository;
 import br.com.api.services.chat_service.ChatServiceImpl;
 import br.com.api.services.follower_service.FollowerServiceImpl;
+import br.com.api.services.message_service.MessageServiceImpl;
 import br.com.api.services.post_service.PostServiceImpl;
 import br.com.api.services.comment_service.CommentServiceImpl;
 import org.springframework.stereotype.Service;
@@ -18,18 +19,18 @@ public class UserServiceImpl implements UserService {
     private final PostServiceImpl postService;
     private final CommentServiceImpl commentService;
     private final FollowerServiceImpl friendshipService;
-
-
+    private final MessageServiceImpl messageService;
     private final ChatServiceImpl chatService;
 
     public UserServiceImpl(UserRepository userRepository, PostServiceImpl postService,
                            CommentServiceImpl commentService, FollowerServiceImpl friendshipService,
-                           ChatServiceImpl chatService) {
+                           ChatServiceImpl chatService, MessageServiceImpl messageService) {
         this.userRepository = userRepository;
         this.postService = postService;
         this.commentService = commentService;
         this.friendshipService = friendshipService;
         this.chatService = chatService;
+        this.messageService = messageService;
     }
 
 
@@ -140,7 +141,7 @@ public class UserServiceImpl implements UserService {
             postService.createPost(newPost);
 
             return user_data.get();
-          
+
         }catch (Exception e){
             throw new RuntimeException("Falhou na ao fazer o post",e);
         }
@@ -158,11 +159,12 @@ public class UserServiceImpl implements UserService {
     public List<UserEntity> findAllFollowedUsers(Long user_id) {
         Optional<UserEntity> user_data = userRepository.findById(user_id);
 
-        List<FollowerEntity> friendship_list = user_data.get().getFriends_list();
+        List<FollowerEntity> followers_list = user_data.get().getFriends_list();
 
         ArrayList<UserEntity> user_friends = new ArrayList<>();
 
-        for (FollowerEntity friendship: friendship_list) {
+
+        for (FollowerEntity friendship: followers_list) {
             Optional<UserEntity> user1 = userRepository.findById(friendship.getUser1());
 
             user_friends.add(user1.get());
@@ -209,16 +211,50 @@ public class UserServiceImpl implements UserService {
             }
 
             ChatEntity chat = new ChatEntity();
+            Set<ChatEntity> chatArrayUser1 = new HashSet<>();
+            Set<ChatEntity> chatArrayUser2 = new HashSet<>();
 
             chat.setPerson1_username(user1.get().getUsername());
             chat.setPerson2_username(user2.get().getUsername());
-            System.out.println("Passou aqui fera");
-            System.out.println(chat);
-           return chatService.createChat(chat);
+
+            chatArrayUser1.add(chat);
+            chatArrayUser2.add(chat);
+
+            user1.get().setChat_list(chatArrayUser1);
+            editUser(user1.get(),user_id);
+
+            user2.get().setChat_list(chatArrayUser2);
+            editUser(user2.get(), other_person_id);
+
+            return chatService.createChat(chat);
 
         }
         catch (Exception e){
             throw new RuntimeException("Ocorreu um erro ao criar o chat", e);
+        }
+    }
+
+    @Override
+    public ChatEntity sendMessage(String message, Long chat_id) {
+        try {
+            ChatEntity current_chat = chatService.findChatById(chat_id);
+
+//            Set<MessageEntity> messageArray = new HashSet<>();
+            MessageEntity messageEntity = new MessageEntity();
+
+            messageEntity.setContent(message);
+            messageEntity.setMessage_chat(current_chat);
+
+            messageService.createMessage(messageEntity);
+
+//            messageArray.add(messageEntity);
+//
+//            current_chat.setMessages(messageArray);
+//
+            return current_chat;
+        }
+        catch (Exception e){
+            throw new RuntimeException("Erro ao enviar uma mensagem");
         }
     }
 }

@@ -14,5 +14,7 @@ public interface ChatService {
 
     public void deleteChat(Long chat_id);
 
+    public ChatEntity findChatById(Long chat_id);
+
 
 }

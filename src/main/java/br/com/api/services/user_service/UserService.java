@@ -28,4 +28,6 @@ public interface UserService {
    public UserEntity makeComment(Long user_id, CommentEntity newComment);
 
    public ChatEntity startChat(Long user_id, Long other_person_id);
+
+   public ChatEntity sendMessage(String message, Long chat_id);
 }

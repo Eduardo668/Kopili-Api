@@ -2,14 +2,11 @@ package br.com.api.models;
 
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -30,6 +27,11 @@ public class ChatEntity {
     
     @OneToMany(mappedBy = "message_chat")
     private Set<MessageEntity> messages;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity userChat;
 
     public Long getId() {
         return id;
@@ -61,6 +63,14 @@ public class ChatEntity {
 
     public void setMessages(Set<MessageEntity> messages) {
         this.messages = messages;
+    }
+
+    public UserEntity getUserChat() {
+        return userChat;
+    }
+
+    public void setUserChat(UserEntity userChat) {
+        this.userChat = userChat;
     }
 
     @Override

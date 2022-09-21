@@ -19,10 +19,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public ChatEntity createChat(ChatEntity newChat) {
         try {
-            // Optional<ChatEntity> chat_data = chatRepository.findById(newChat.getId());
-            // if(chat_data.isPresent()){
-            //     throw new RuntimeException("Este chat ja existe");
-            // }
+
             if( newChat.getId() == null) {
                 return chatRepository.save(newChat);
             } else {
@@ -48,10 +45,21 @@ public class ChatServiceImpl implements ChatService {
 //            if (chat_data.isEmpty()){
 //                throw new RuntimeException("Este chat não existe");
 //            }
-//            chat_data.map(chat ->{
-//                chat.se
-//            })
+//           Optional<ChatEntity> editedChat = chat_data.map(chat ->{
+//                chat.setMessages(updatedChat.getMessages());
+//                chat.setPerson1_username(updatedChat.getPerson1_username());
+//                chat.setPerson2_username(updatedChat.getPerson2_username());
+//                System.out.println(chat);
+//               System.out.println(chatRepository.save(chat));
+//                return chat;
+//            });
+//            System.out.println(editedChat.get());
+//            return editedChat.get();
 //
+//
+//        }
+//        catch (Exception e){
+//            throw new RuntimeException("Erro ao editar o chat");
 //        }
 //    }
 
@@ -67,5 +75,16 @@ public class ChatServiceImpl implements ChatService {
         catch (Exception e){
             throw new RuntimeException("Ocorreu um erro ao deletar o chat",e);
         }
+    }
+
+    @Override
+    public ChatEntity findChatById(Long chat_id) {
+        Optional<ChatEntity> chat_data = chatRepository.findById(chat_id);
+
+        if (chat_data.isEmpty()){
+            throw new RuntimeException("Esse Chat não existe");
+        }
+
+        return chat_data.get();
     }
 }

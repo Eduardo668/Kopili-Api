@@ -57,6 +57,8 @@ public class UserEntity implements Serializable {
     @JsonManagedReference
     private Set<PostEntity> user_posts;
 
+    @OneToMany(mappedBy = "userChat")
+    private Set<ChatEntity> chat_list;
 
     //@JsonIgnore
     @ManyToMany(mappedBy = "userFriend")
@@ -144,6 +146,14 @@ public class UserEntity implements Serializable {
 
     public void setBorn(Date born) {
         this.born = born;
+    }
+
+    public Set<ChatEntity> getChat_list() {
+        return chat_list;
+    }
+
+    public void setChat_list(Set<ChatEntity> chat_list) {
+        this.chat_list = chat_list;
     }
 
     @Override
