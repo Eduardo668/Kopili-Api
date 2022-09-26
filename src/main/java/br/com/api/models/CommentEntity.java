@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
 
@@ -21,12 +21,14 @@ public class CommentEntity {
 
     @NotNull
     private Date comment_date;
-
+    
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
 //    @JsonBackReference
     private UserEntity user_comment;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
 //    @JsonBackReference

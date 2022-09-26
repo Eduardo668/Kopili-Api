@@ -67,4 +67,13 @@ public class PostServiceImpl implements PostService{
         }
     }
 
+    @Override
+    public PostEntity findPostById(Long post_id) {
+        Optional<PostEntity> post_data = postRepository.findById(post_id);
+        if(post_data.isEmpty()){
+            throw new RuntimeException("Este post não existe");
+        }
+        return post_data.get();
+    }
+
 }

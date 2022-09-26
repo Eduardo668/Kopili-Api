@@ -1,5 +1,6 @@
 package br.com.api.models;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -7,9 +8,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 @Entity
 public class ChatEntity {
     
@@ -29,9 +29,8 @@ public class ChatEntity {
     private Set<MessageEntity> messages;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity userChat;
+    @ManyToMany
+    private List<UserEntity> userChat;
 
     public Long getId() {
         return id;
@@ -57,6 +56,14 @@ public class ChatEntity {
         this.person2_username = person2_username;
     }
 
+  
+    
+    @Override
+    public String toString() {
+        return "ChatEntity [id=" + id + ", person1_username=" + person1_username + ", person2_username="
+                + person2_username + "]";
+    }
+
     public Set<MessageEntity> getMessages() {
         return messages;
     }
@@ -65,17 +72,12 @@ public class ChatEntity {
         this.messages = messages;
     }
 
-    public UserEntity getUserChat() {
+    public List<UserEntity> getUserChat() {
         return userChat;
     }
 
-    public void setUserChat(UserEntity userChat) {
+    public void setUserChat(List<UserEntity> userChat) {
         this.userChat = userChat;
     }
 
-    @Override
-    public String toString() {
-        return "ChatEntity [id=" + id + ", person1_username=" + person1_username + ", person2_username="
-                + person2_username + "]";
-    }
 }

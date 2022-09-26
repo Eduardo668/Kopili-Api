@@ -70,8 +70,8 @@ public class UserController {
         }
     }
 
-    @PostMapping("/makePost/{id}")
-    public ResponseEntity<UserEntity> makePost(@RequestBody PostEntity newPost, @PathVariable("id") Long user_id){
+    @PostMapping("/makePost/user_id={user_id}")
+    public ResponseEntity<UserEntity> makePost(@RequestBody PostEntity newPost, @PathVariable("user_id") Long user_id){
         try{
             return ResponseEntity.ok(userService.makePost(user_id, newPost));
         }
@@ -96,10 +96,11 @@ public class UserController {
         return ResponseEntity.ok(userService.findAllFollowedUsers(user_id));
     }
 
-    @PostMapping("/makeComment/{id}")
-    public ResponseEntity<UserEntity> makeComment(@RequestBody CommentEntity newComment, @PathVariable ("id") Long user_id){
+    @PostMapping("/makeComment/user_id={user_id}/post_id={post_id}")
+    public ResponseEntity<PostEntity> makeComment(@RequestBody CommentEntity newComment,
+                         @PathVariable ("user_id") Long user_id, @PathVariable("post_id") Long post_id){
         try{
-            return ResponseEntity.ok(userService.makeComment(user_id, newComment));
+            return ResponseEntity.ok(userService.makeComment(user_id,post_id, newComment));
         }
         catch (Exception e){
             throw new RuntimeException("Erro", e);

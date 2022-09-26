@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;
@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class UserEntity implements Serializable {
 
@@ -57,21 +56,15 @@ public class UserEntity implements Serializable {
     @JsonManagedReference
     private Set<PostEntity> user_posts;
 
-    @OneToMany(mappedBy = "userChat")
-    private Set<ChatEntity> chat_list;
+    @ManyToMany(mappedBy = "userChat")
+    private List<ChatEntity> chat_list;
 
     //@JsonIgnore
     @ManyToMany(mappedBy = "userFriend")
     //@JsonManagedReference
-    private List<FollowerEntity> friends_list;
+    private List<FollowerEntity> followed_list;
 
-    public List<FollowerEntity> getFriends_list() {
-        return friends_list;
-    }
-
-    public void setFriends_list(List<FollowerEntity> friends_list) {
-        this.friends_list = friends_list;
-    }
+    
 
     public UserEntity() {
     }
@@ -148,12 +141,18 @@ public class UserEntity implements Serializable {
         this.born = born;
     }
 
-    public Set<ChatEntity> getChat_list() {
-        return chat_list;
+   
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
     }
 
-    public void setChat_list(Set<ChatEntity> chat_list) {
-        this.chat_list = chat_list;
+    public List<FollowerEntity> getFollowed_list() {
+        return followed_list;
+    }
+
+    public void setFollowed_list(List<FollowerEntity> followed_list) {
+        this.followed_list = followed_list;
     }
 
     @Override
@@ -167,5 +166,13 @@ public class UserEntity implements Serializable {
                 ", photo='" + photo + '\'' +
                 ", born=" + born +
                 '}';
+    }
+
+    public List<ChatEntity> getChat_list() {
+        return chat_list;
+    }
+
+    public void setChat_list(List<ChatEntity> chat_list) {
+        this.chat_list = chat_list;
     }
 }

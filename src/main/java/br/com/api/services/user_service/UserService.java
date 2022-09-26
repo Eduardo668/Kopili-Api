@@ -25,7 +25,7 @@ public interface UserService {
 
     public List<UserEntity> findAllFollowedUsers(Long user_id);
 
-   public UserEntity makeComment(Long user_id, CommentEntity newComment);
+   public PostEntity makeComment(Long user_id, Long post_id , CommentEntity newComment);
 
    public ChatEntity startChat(Long user_id, Long other_person_id);
 

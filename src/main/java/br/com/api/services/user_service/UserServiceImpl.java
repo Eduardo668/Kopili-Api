@@ -7,6 +7,8 @@ import br.com.api.services.follower_service.FollowerServiceImpl;
 import br.com.api.services.message_service.MessageServiceImpl;
 import br.com.api.services.post_service.PostServiceImpl;
 import br.com.api.services.comment_service.CommentServiceImpl;
+
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 
@@ -159,7 +161,7 @@ public class UserServiceImpl implements UserService {
     public List<UserEntity> findAllFollowedUsers(Long user_id) {
         Optional<UserEntity> user_data = userRepository.findById(user_id);
 
-        List<FollowerEntity> followers_list = user_data.get().getFriends_list();
+        List<FollowerEntity> followers_list = user_data.get().getFollowed_list();
 
         ArrayList<UserEntity> user_friends = new ArrayList<>();
 
@@ -175,9 +177,10 @@ public class UserServiceImpl implements UserService {
     }
 
 	@Override
-	public UserEntity makeComment(Long user_id, CommentEntity newComment) {
+	public PostEntity makeComment(Long user_id,Long post_id, CommentEntity newComment) {
 		try {
            Optional<UserEntity> user_data = userRepository.findById(user_id);
+           PostEntity post_data = postService.findPostById(post_id);
 
            if(user_data.isEmpty()){
                throw new RuntimeException("Erro");
@@ -189,8 +192,15 @@ public class UserServiceImpl implements UserService {
 
            newComment.setUser_comment(user_data.get());
 
-           commentService.createComment(newComment);
-           return user_data.get();
+            CommentEntity createdComment = commentService.createComment(newComment);
+
+           Set<CommentEntity> commentsHashForSave = new HashSet<>();
+           
+           commentsHashForSave.add(createdComment);
+        
+           post_data.setComments(commentsHashForSave);
+           
+           return post_data;
 
        }catch (Exception e){
            throw new RuntimeException("Falhou ao fazer o comentário",e);
@@ -211,21 +221,17 @@ public class UserServiceImpl implements UserService {
             }
 
             ChatEntity chat = new ChatEntity();
-            Set<ChatEntity> chatArrayUser1 = new HashSet<>();
-            Set<ChatEntity> chatArrayUser2 = new HashSet<>();
-
+            
+            List<UserEntity> userChatListForSave = new ArrayList<>();
+         
             chat.setPerson1_username(user1.get().getUsername());
             chat.setPerson2_username(user2.get().getUsername());
-
-            chatArrayUser1.add(chat);
-            chatArrayUser2.add(chat);
-
-            user1.get().setChat_list(chatArrayUser1);
-            editUser(user1.get(),user_id);
-
-            user2.get().setChat_list(chatArrayUser2);
-            editUser(user2.get(), other_person_id);
-
+            
+            userChatListForSave.add(user1.get());
+            userChatListForSave.add(user2.get());
+          
+            chat.setUserChat(userChatListForSave);
+            
             return chatService.createChat(chat);
 
         }

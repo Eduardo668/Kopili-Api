@@ -17,7 +17,6 @@ public class MessageEntity {
     @Size(max = 500)
     private String content;
 
-
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "chat_id")
@@ -43,9 +42,9 @@ public class MessageEntity {
         return message_chat;
     }
 
-
-
     public void setMessage_chat(ChatEntity message_chat) {
         this.message_chat = message_chat;
     }
+
+ 
 }

@@ -8,6 +8,8 @@ public interface PostService {
 
    public PostEntity createPost(PostEntity newPost);
 
+   public PostEntity findPostById(Long post_id);
+
    public List<PostEntity> findAllPost();
 
    public PostEntity editPost(PostEntity editedPost, Long post_id);
