@@ -197,7 +197,8 @@ public class UserServiceImpl implements UserService {
            Set<CommentEntity> commentsHashForSave = new HashSet<>();
            
            commentsHashForSave.add(createdComment);
-        
+           
+	   // BUGADO
            post_data.setComments(commentsHashForSave);
            
            return post_data;
