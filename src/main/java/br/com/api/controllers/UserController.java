@@ -35,9 +35,11 @@ public class UserController {
         try{
             System.out.println(user);
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+
             long size = multipartFile.getSize();
 
             String fileCode = UserImagesUploadUtil.saveFile(fileName,multipartFile);
+
             user.setPhoto(fileCode);
             System.out.println(fileCode);
 
