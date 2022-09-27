@@ -1,5 +1,7 @@
 package br.com.api.controllers;
 
+import br.com.api.file_management.user.UserImageUploadResponse;
+import br.com.api.file_management.user.UserImagesUploadUtil;
 import br.com.api.models.PostEntity;
 import br.com.api.models.ChatEntity;
 import br.com.api.models.CommentEntity;
@@ -8,12 +10,15 @@ import br.com.api.services.user_service.UserServiceImpl;
 
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/user")
 public class UserController {
 
@@ -25,9 +30,17 @@ public class UserController {
 
     // End-Point para a criação/cadastro de um usuario
     @PostMapping("/create")
-    public ResponseEntity<Boolean> createUser(@RequestBody UserEntity user){
+    public ResponseEntity<Boolean> createUser(@RequestBody UserEntity user,
+                                              @RequestParam("file") MultipartFile multipartFile){
         try{
             System.out.println(user);
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            long size = multipartFile.getSize();
+
+            String fileCode = UserImagesUploadUtil.saveFile(fileName,multipartFile);
+            user.setPhoto(fileCode);
+            System.out.println(fileCode);
+
             userService.createUser(user);
             return ResponseEntity.ok(true);
         }
@@ -129,6 +142,29 @@ public class UserController {
         catch (Exception e){
             throw new RuntimeException("Erro a fazer a requisição para o envio da mensagem");
         }
+    }
+
+    @PostMapping("/saveUserImage")
+    public ResponseEntity<String> saveUserImage(@RequestParam("file") MultipartFile multipartFile)
+            throws IOException {
+
+        try {
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            long size = multipartFile.getSize();
+
+            System.out.println(fileName);
+
+            String fileCode = UserImagesUploadUtil.saveFile(fileName,multipartFile);
+
+            System.out.println(fileCode);
+
+            return ResponseEntity.ok("YES");
+
+        }
+        catch (Exception e){
+            throw new RuntimeException("ERRO", e);
+        }
+
     }
 
 

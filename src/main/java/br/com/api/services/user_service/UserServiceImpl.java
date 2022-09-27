@@ -187,20 +187,17 @@ public class UserServiceImpl implements UserService {
            }
 
            Set<CommentEntity> commentEntities = new HashSet<>();
+           Set<PostEntity> postHashForSave = new HashSet<>();
 
            commentEntities.add(newComment);
+           postHashForSave.add(post_data);
 
            newComment.setUser_comment(user_data.get());
+           newComment.setUser_commented(user_data.get().getUsername());
+           newComment.setPostComments(postHashForSave);
 
-            CommentEntity createdComment = commentService.createComment(newComment);
+           commentService.createComment(newComment);
 
-           Set<CommentEntity> commentsHashForSave = new HashSet<>();
-           
-           commentsHashForSave.add(createdComment);
-           
-	   // BUGADO
-           post_data.setComments(commentsHashForSave);
-           
            return post_data;
 
        }catch (Exception e){

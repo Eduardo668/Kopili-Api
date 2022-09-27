@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity(name = "Comentario")
 public class CommentEntity {
@@ -21,18 +22,19 @@ public class CommentEntity {
 
     @NotNull
     private Date comment_date;
-    
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-//    @JsonBackReference
-    private UserEntity user_comment;
+
+    @Size(max = 200)
+    @NotNull
+    private String user_commented;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "post_id")
 //    @JsonBackReference
-    private PostEntity postComments;
+    private  UserEntity user_comment;
+
+    @JsonIgnore
+    @ManyToMany
+    private Set<PostEntity> postComments;
 
     public CommentEntity() {
     }
@@ -69,12 +71,19 @@ public class CommentEntity {
         this.user_comment = user_comment;
     }
 
-    public PostEntity getPostComments() {
+    public Set<PostEntity> getPostComments() {
         return postComments;
     }
 
-    public void setPostComments(PostEntity postComments) {
-        this.postComments = postComments;
+    public String getUser_commented() {
+        return user_commented;
     }
 
+    public void setUser_commented(String user_commented) {
+        this.user_commented = user_commented;
+    }
+
+    public void setPostComments(Set<PostEntity> postComments) {
+        this.postComments = postComments;
+    }
 }
