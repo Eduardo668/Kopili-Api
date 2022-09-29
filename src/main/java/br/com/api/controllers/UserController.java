@@ -52,6 +52,12 @@ public class UserController {
 
     }
 
+    @PostMapping("/createUserPhoto")
+    public ResponseEntity<UserEntity> createUserPhoto(){
+        
+    }
+
+
     // End-Point para visualizar todos os usuarios que estão cadastrados no banco de dados
     @GetMapping("/read")
     public ResponseEntity<List<UserEntity>> findAllUsers(){

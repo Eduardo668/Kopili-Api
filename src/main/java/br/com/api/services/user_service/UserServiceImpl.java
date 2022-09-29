@@ -8,7 +8,6 @@ import br.com.api.services.message_service.MessageServiceImpl;
 import br.com.api.services.post_service.PostServiceImpl;
 import br.com.api.services.comment_service.CommentServiceImpl;
 
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 
@@ -117,7 +116,7 @@ public class UserServiceImpl implements UserService {
 
               userArrayForSave.add(user1_data.get());
 
-              friendshipObject.setUserFriend(userArrayForSave);
+              friendshipObject.setUserFollowed(userArrayForSave);
 
               friendshipService.createFollowEntity(friendshipObject);
 
@@ -161,7 +160,7 @@ public class UserServiceImpl implements UserService {
     public List<UserEntity> findAllFollowedUsers(Long user_id) {
         Optional<UserEntity> user_data = userRepository.findById(user_id);
 
-        List<FollowerEntity> followers_list = user_data.get().getFollowed_list();
+        List<FollowerEntity> followers_list = user_data.get().getFollow_list();
 
         ArrayList<UserEntity> user_friends = new ArrayList<>();
 
@@ -194,7 +193,7 @@ public class UserServiceImpl implements UserService {
 
            newComment.setUser_comment(user_data.get());
            newComment.setUser_commented(user_data.get().getUsername());
-           newComment.setPostComments(postHashForSave);
+           newComment.setPost_comments(postHashForSave);
 
            commentService.createComment(newComment);
 

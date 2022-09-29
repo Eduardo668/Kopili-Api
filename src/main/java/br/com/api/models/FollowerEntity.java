@@ -21,7 +21,7 @@ public class FollowerEntity implements Serializable {
 
     @JsonIgnore
     @ManyToMany
-    private Set<UserEntity> userFriend;
+    private Set<UserEntity> userFollowed;
 
 
 
@@ -44,12 +44,12 @@ public class FollowerEntity implements Serializable {
 
 
 
-    public Set<UserEntity> getUserFriend() {
-        return userFriend;
+    public Set<UserEntity> getUserFollowed() {
+        return userFollowed;
     }
 
-    public void setUserFriend(Set<UserEntity> userFriend) {
-        this.userFriend = userFriend;
+    public void setUserFollowed(Set<UserEntity> userFollowed) {
+        this.userFollowed = userFollowed;
     }
 
     @Override

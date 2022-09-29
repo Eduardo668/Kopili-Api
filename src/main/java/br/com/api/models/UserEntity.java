@@ -60,9 +60,9 @@ public class UserEntity implements Serializable {
     private List<ChatEntity> chat_list;
 
     //@JsonIgnore
-    @ManyToMany(mappedBy = "userFriend")
+    @ManyToMany(mappedBy = "userFollowed")
     //@JsonManagedReference
-    private List<FollowerEntity> followed_list;
+    private List<FollowerEntity> follow_list;
 
     
 
@@ -147,12 +147,12 @@ public class UserEntity implements Serializable {
         return serialVersionUID;
     }
 
-    public List<FollowerEntity> getFollowed_list() {
-        return followed_list;
+    public List<FollowerEntity> getFollow_list() {
+        return follow_list;
     }
 
-    public void setFollowed_list(List<FollowerEntity> followed_list) {
-        this.followed_list = followed_list;
+    public void setFollow_list(List<FollowerEntity> follow_list) {
+        this.follow_list = follow_list;
     }
 
     @Override

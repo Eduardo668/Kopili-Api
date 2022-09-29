@@ -34,7 +34,7 @@ public class CommentEntity {
 
     @JsonIgnore
     @ManyToMany
-    private Set<PostEntity> postComments;
+    private Set<PostEntity> post_comments;
 
     public CommentEntity() {
     }
@@ -71,8 +71,8 @@ public class CommentEntity {
         this.user_comment = user_comment;
     }
 
-    public Set<PostEntity> getPostComments() {
-        return postComments;
+    public Set<PostEntity> getPost_comments() {
+        return post_comments;
     }
 
     public String getUser_commented() {
@@ -83,7 +83,7 @@ public class CommentEntity {
         this.user_commented = user_commented;
     }
 
-    public void setPostComments(Set<PostEntity> postComments) {
-        this.postComments = postComments;
+    public void setPost_comments(Set<PostEntity> post_comments) {
+        this.post_comments = post_comments;
     }
 }
