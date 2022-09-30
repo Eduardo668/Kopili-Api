@@ -30,32 +30,20 @@ public class UserController {
 
     // End-Point para a criação/cadastro de um usuario
     @PostMapping("/create")
-    public ResponseEntity<Boolean> createUser(@RequestBody UserEntity user,
-                                              @RequestParam("file") MultipartFile multipartFile){
+    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity user){
         try{
-            System.out.println(user);
-            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 
-            long size = multipartFile.getSize();
-
-            String fileCode = UserImagesUploadUtil.saveFile(fileName,multipartFile);
-
-            user.setPhoto(fileCode);
-            System.out.println(fileCode);
-
-            userService.createUser(user);
-            return ResponseEntity.ok(true);
+            return ResponseEntity.ok(userService.createUser(user));
         }
         catch (Exception e){
             throw new RuntimeException("Falhou", e);
         }
-
     }
 
-    @PostMapping("/createUserPhoto")
-    public ResponseEntity<UserEntity> createUserPhoto(){
-        
-    }
+//    @PostMapping("/createUserPhoto")
+//    public ResponseEntity<UserEntity> createUserPhoto(){
+//
+//    }
 
 
     // End-Point para visualizar todos os usuarios que estão cadastrados no banco de dados

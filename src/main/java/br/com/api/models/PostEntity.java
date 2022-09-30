@@ -39,7 +39,7 @@ public class PostEntity {
 	@NotNull
     private Date post_date;
 
-    @ManyToMany(mappedBy = "postComments")
+    @ManyToMany(mappedBy = "post_comments")
     private Set<CommentEntity> comments;
 
     @ManyToOne
