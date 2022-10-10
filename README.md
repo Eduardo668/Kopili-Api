@@ -23,6 +23,10 @@ Desenvolver uma rede social na qual serão publicadas atividades relativas ao po
 <br>
 <br>
 <img src="https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png" alt="drawing" width="70"/>
+<br>
+<br>
+<img src="https://www.docker.com/wp-content/uploads/2022/03/vertical-logo-monochromatic.png" alt="drawing" width="80"/>
+
 
 
 

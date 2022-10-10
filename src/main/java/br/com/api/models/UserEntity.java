@@ -38,6 +38,7 @@ public class UserEntity implements Serializable {
 
     @NotNull
     @Size(max = 100)
+    @Column(unique = true)
     private String email;
 
     @Size(max = 200)

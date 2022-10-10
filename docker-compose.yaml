@@ -1,0 +1,13 @@
+version: '3'
+services:
+  kopili-database:
+    image: postgres:14-alpine
+    restart: always
+    container_name: kopili-database
+    environment:
+      - POSTGRES_PASSWORD=@root123456
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=kopili_database
+    ports:
+      - 5000:5432
+    
