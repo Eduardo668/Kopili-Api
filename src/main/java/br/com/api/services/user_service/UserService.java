@@ -7,6 +7,8 @@ import br.com.api.models.UserEntity;
 
 import java.util.List;
 
+import org.springframework.core.io.FileSystemResource;
+
 public interface UserService {
 
     public UserEntity createUser(UserEntity newUser);
@@ -30,4 +32,12 @@ public interface UserService {
    public ChatEntity startChat(Long user_id, Long other_person_id);
 
    public ChatEntity sendMessage(String message, Long chat_id);
+
+   public UserEntity saveUserImage(byte[] imageBytes, String imageName, Long user_id);
+
+   public FileSystemResource findUserImage(Long user_id);
+
+   public UserEntity savePostImageMadeByUser(byte[] imageBytes, String imageName, Long user_id, Long post_id);
+
+   public FileSystemResource findUserPostImage(Long post_id, Long user_id);
 }

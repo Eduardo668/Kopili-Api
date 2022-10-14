@@ -44,6 +44,7 @@ public class PostServiceImpl implements PostService{
                 post.setLink(editedPost.getLink());
                 post.setDescription(editedPost.getDescription());
                 post.setSubject(editedPost.getSubject());
+                post.setImage(editedPost.getImage());
                 return postRepository.save(post);
             }).orElseGet(() -> {
                 editedPost.setId(id);

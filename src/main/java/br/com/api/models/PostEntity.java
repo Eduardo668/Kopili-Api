@@ -18,10 +18,6 @@ public class PostEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @Lob
-    private String image;
-
     @NotNull
     @Size(max = 500)
     private String link;
@@ -45,7 +41,10 @@ public class PostEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
 	@JsonBackReference
-    private UserEntity userPost;
+	private UserEntity userPost;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	private ImageEntity image;
 
     public PostEntity() {
 
@@ -58,10 +57,10 @@ public class PostEntity {
 		this.id = id;
 	}
 
-	public String getImage() {
+	public ImageEntity getImage() {
 		return image;
 	}
-	public void setImage(String image) {
+	public void setImage(ImageEntity image) {
 		this.image = image;
 	}
 
@@ -107,4 +106,17 @@ public class PostEntity {
 	public void setUserPost(UserEntity userPost) {
 		this.userPost = userPost;
 	}
+
+	@Override
+    public String toString() {
+        return "PostEntity{" +
+				"id=" + id +
+				"link="+ link + 
+				"description="+ description +
+				"subject="+ subject+
+           
+                '}';
+    }
+	
+
 }

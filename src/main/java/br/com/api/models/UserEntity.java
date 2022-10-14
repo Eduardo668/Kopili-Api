@@ -41,9 +41,6 @@ public class UserEntity implements Serializable {
     @Column(unique = true)
     private String email;
 
-    @Size(max = 200)
-    private String photo;
-
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy") 
     @NotNull
@@ -55,7 +52,7 @@ public class UserEntity implements Serializable {
 
     @OneToMany(mappedBy = "userPost")
     @JsonManagedReference
-    private Set<PostEntity> user_posts;
+    private List<PostEntity> user_posts;
 
     @ManyToMany(mappedBy = "userChat")
     private List<ChatEntity> chat_list;
@@ -64,6 +61,9 @@ public class UserEntity implements Serializable {
     @ManyToMany(mappedBy = "userFollowed")
     //@JsonManagedReference
     private List<FollowerEntity> follow_list;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private ImageEntity userImage;
 
     
 
@@ -86,11 +86,11 @@ public class UserEntity implements Serializable {
         this.comments = comments;
     }
 
-    public Set<PostEntity> getUser_posts() {
+    public List<PostEntity> getUser_posts() {
         return user_posts;
     }
 
-    public void setUser_posts(Set<PostEntity> user_posts) {
+    public void setUser_posts(List<PostEntity> user_posts) {
         this.user_posts = user_posts;
     }
 
@@ -126,14 +126,6 @@ public class UserEntity implements Serializable {
         this.email = email;
     }
 
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
     public Date getBorn() {
         return born;
     }
@@ -164,7 +156,6 @@ public class UserEntity implements Serializable {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", photo='" + photo + '\'' +
                 ", born=" + born +
                 '}';
     }
@@ -175,5 +166,13 @@ public class UserEntity implements Serializable {
 
     public void setChat_list(List<ChatEntity> chat_list) {
         this.chat_list = chat_list;
+    }
+
+    public ImageEntity getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(ImageEntity userImage) {
+        this.userImage = userImage;
     }
 }

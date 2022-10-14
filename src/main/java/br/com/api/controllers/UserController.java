@@ -1,14 +1,14 @@
 package br.com.api.controllers;
 
-import br.com.api.file_management.user.UserImageUploadResponse;
-import br.com.api.file_management.user.UserImagesUploadUtil;
 import br.com.api.models.PostEntity;
 import br.com.api.models.ChatEntity;
 import br.com.api.models.CommentEntity;
 import br.com.api.models.UserEntity;
+import br.com.api.repository.UserRepository;
 import br.com.api.services.user_service.UserServiceImpl;
 
-
+import org.springframework.http.MediaType;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +24,7 @@ public class UserController {
 
     private final UserServiceImpl userService;
 
+
     public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
@@ -32,18 +33,65 @@ public class UserController {
     @PostMapping("/create")
     public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity user){
         try{
-
             return ResponseEntity.ok(userService.createUser(user));
-        }
-        catch (Exception e){
+        }     catch (Exception e){
             throw new RuntimeException("Falhou", e);
         }
     }
+     
+     
 
-//    @PostMapping("/createUserPhoto")
-//    public ResponseEntity<UserEntity> createUserPhoto(){
-//
-//    }
+    @PutMapping("/userImageUpload/user_id={user_id}")
+    public ResponseEntity<UserEntity> uploadUserImage(@RequestParam MultipartFile image,
+    @PathVariable Long user_id){
+
+        try{
+            return ResponseEntity.ok(userService.saveUserImage(image.getBytes(), 
+            image.getOriginalFilename(), user_id));
+        }
+        catch(Exception e){
+            throw new RuntimeException("Erro na requisição de salvamento da imagem do usuario", e);
+        }
+      
+    }
+
+    @PutMapping("/postImageUpload/user_id={user_id}/post_id={post_id}")
+    public ResponseEntity<UserEntity> uploadPostImage(@RequestParam MultipartFile postImage, 
+    @PathVariable Long user_id, @PathVariable Long post_id){
+
+        try{
+            return ResponseEntity.ok(userService.savePostImageMadeByUser(postImage.getBytes(), 
+            postImage.getOriginalFilename(), user_id, post_id));
+        }
+        catch(Exception e){
+            throw new RuntimeException("Erro na requisição de salvamento da imagem do post");
+        }
+
+
+    }
+
+
+
+    @GetMapping(value = "/findUserImage/user_id={user_id}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<FileSystemResource> findUserImage(@PathVariable Long user_id){
+        try{
+            return ResponseEntity.ok(userService.findUserImage(user_id));
+        }
+        catch(Exception e){
+            throw new RuntimeException("Erro ao realizar a requisição de encontrar a imagem do usuario",e);
+        }
+        
+    }
+
+    @GetMapping(value = "/findUserPostImage/user_id={user_id}/post_id={post_id}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<FileSystemResource> findUserImage(@PathVariable Long user_id, @PathVariable Long post_id){
+        try{
+            return ResponseEntity.ok(userService.findUserPostImage(post_id, user_id));
+        }
+        catch(Exception e){
+            throw new RuntimeException("Erro ao realizar a requisição de encontrar a imagem do usuario",e);
+        }
+    }
 
 
     // End-Point para visualizar todos os usuarios que estão cadastrados no banco de dados
@@ -138,29 +186,6 @@ public class UserController {
         catch (Exception e){
             throw new RuntimeException("Erro a fazer a requisição para o envio da mensagem");
         }
-    }
-
-    @PostMapping("/saveUserImage")
-    public ResponseEntity<String> saveUserImage(@RequestParam("file") MultipartFile multipartFile)
-            throws IOException {
-
-        try {
-            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-            long size = multipartFile.getSize();
-
-            System.out.println(fileName);
-
-            String fileCode = UserImagesUploadUtil.saveFile(fileName,multipartFile);
-
-            System.out.println(fileCode);
-
-            return ResponseEntity.ok("YES");
-
-        }
-        catch (Exception e){
-            throw new RuntimeException("ERRO", e);
-        }
-
     }
 
 

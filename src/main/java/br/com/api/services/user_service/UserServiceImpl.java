@@ -1,13 +1,17 @@
 package br.com.api.services.user_service;
 
+import br.com.api.file_management.post.PostFileSystemRepo;
+import br.com.api.file_management.user.UserFileSystemRepo;
 import br.com.api.models.*;
 import br.com.api.repository.UserRepository;
 import br.com.api.services.chat_service.ChatServiceImpl;
 import br.com.api.services.follower_service.FollowerServiceImpl;
+import br.com.api.services.image_service.ImageServiceImpl;
 import br.com.api.services.message_service.MessageServiceImpl;
 import br.com.api.services.post_service.PostServiceImpl;
 import br.com.api.services.comment_service.CommentServiceImpl;
 
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
 
@@ -22,19 +26,29 @@ public class UserServiceImpl implements UserService {
     private final FollowerServiceImpl friendshipService;
     private final MessageServiceImpl messageService;
     private final ChatServiceImpl chatService;
+    private final UserFileSystemRepo userFileSystem;
+    private final PostFileSystemRepo postFileSystem;
+    private final ImageServiceImpl imageService;
+    
 
     public UserServiceImpl(UserRepository userRepository, PostServiceImpl postService,
                            CommentServiceImpl commentService, FollowerServiceImpl friendshipService,
-                           ChatServiceImpl chatService, MessageServiceImpl messageService) {
+                           ChatServiceImpl chatService, MessageServiceImpl messageService, 
+                           UserFileSystemRepo userFileSystem, ImageServiceImpl imageService, 
+                           PostFileSystemRepo postFileSystem) {
         this.userRepository = userRepository;
         this.postService = postService;
         this.commentService = commentService;
         this.friendshipService = friendshipService;
         this.chatService = chatService;
         this.messageService = messageService;
+        this.userFileSystem = userFileSystem;
+        this.imageService = imageService;
+        this.postFileSystem = postFileSystem;
     }
 
 
+    // Cadastra um usuario no Sistema
     @Override
     public UserEntity createUser(UserEntity newUser) {
         try {
@@ -54,11 +68,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    // Retorna todos os usuario cadastrados no banco de dados
     @Override
     public List<UserEntity> findAllUsers() {
         return userRepository.findAll();
     }
 
+    // Deleta Usuario a partir do id
     @Override
     public void deleteUser(Long id) {
         try {
@@ -74,7 +90,8 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException(e);
         }
     }
-
+    
+    // Edita um Usuario 
     @Override
     public UserEntity editUser(UserEntity editedUser, Long id) {
         try {
@@ -84,7 +101,7 @@ public class UserServiceImpl implements UserService {
                 user.setBorn(editedUser.getBorn());
                 user.setPassword(editedUser.getPassword());
                 user.setUsername(editedUser.getUsername());
-                user.setPhoto(editedUser.getPhoto());
+                user.setUserImage(editedUser.getUserImage());
                 return userRepository.save(user);
             }).orElseGet(() -> {
                 editedUser.setId(id);
@@ -95,6 +112,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    // Se tornar seguidor de outro usuario
     @Override
     public void follow(Long yourUser_id, Long friend_id) {
           try {
@@ -125,6 +143,7 @@ public class UserServiceImpl implements UserService {
           }
     }
 
+    // Fazer uma publicação
     @Override
     public UserEntity makePost(Long user_id, PostEntity newPost) {
         try {
@@ -133,7 +152,7 @@ public class UserServiceImpl implements UserService {
                 throw new RuntimeException("Deu ruim");
             }
 
-            Set<PostEntity> postEntities = new HashSet<>();
+            List<PostEntity> postEntities = new ArrayList<>();
 
             postEntities.add(newPost);
 
@@ -148,6 +167,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    // Encontrar um usuario a partir do seu username
     @Override
     public UserEntity findUserByUsername(String username) {
 
@@ -156,6 +176,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    // Retorna todos os usuario que um determinado usuario esta seguindo
     @Override
     public List<UserEntity> findAllFollowedUsers(Long user_id) {
         Optional<UserEntity> user_data = userRepository.findById(user_id);
@@ -175,6 +196,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    // Faz um comentario em uma publicação
 	@Override
 	public PostEntity makeComment(Long user_id,Long post_id, CommentEntity newComment) {
 		try {
@@ -204,6 +226,7 @@ public class UserServiceImpl implements UserService {
        }
 	}
 
+    // Inicia um chat com outro usuario
     @Override
     public ChatEntity startChat(Long user_id, Long other_person_id) {
         try {
@@ -237,6 +260,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    // Envia uma mensagem em um chat
     @Override
     public ChatEntity sendMessage(String message, Long chat_id) {
         try {
@@ -260,4 +284,126 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Erro ao enviar uma mensagem");
         }
     }
+
+
+    @Override
+    public UserEntity saveUserImage(byte[] imageBytes, String imageName, Long user_id) {
+
+        try{
+
+            Optional<UserEntity> user_data = userRepository.findById(user_id);
+            if (user_data.isEmpty()){
+                throw new RuntimeException("Este usuario não existe");
+            }
+    
+            String location = userFileSystem.save(imageBytes, imageName);
+            
+            ImageEntity newUserImage = new ImageEntity();
+    
+            newUserImage.setLocation(location);
+            newUserImage.setNome(imageName);
+    
+            user_data.get().setUserImage(imageService.saveImage(newUserImage));
+    
+            return editUser(user_data.get(), user_id);
+        }
+        catch(Exception e){
+            throw new RuntimeException("Erro ao salvar a imagem do usuario", e);
+        }
+ 
+    }
+
+
+    @Override
+    public FileSystemResource findUserImage(Long user_id) {
+        Optional<UserEntity> user_data = userRepository.findById(user_id);
+        if (user_data.isEmpty()){
+            throw new RuntimeException("Este usuario não existe");
+        }
+
+        ImageEntity userImage = user_data.get().getUserImage();
+
+        return userFileSystem.findInUserImages(userImage.getLocation());
+
+    }
+
+    @Override
+    public UserEntity savePostImageMadeByUser(byte[] imageBytes, String imageName, Long user_id, Long post_id) {
+        
+        try{
+            
+            System.out.println("Antes de salvar a imagem no fileSystem");
+
+            String imageLocation = postFileSystem.save(imageBytes, imageName);
+
+            System.out.println("Depois de salvar a imagem no fileSystem");
+            
+            ImageEntity newPostImage = new ImageEntity();
+            newPostImage.setLocation(imageLocation);
+            newPostImage.setNome(imageName);
+
+            
+
+            Optional<UserEntity> user_data = userRepository.findById(user_id);
+            if (user_data.isEmpty()){
+                throw new RuntimeException("Este usuario não existe");
+            }
+            
+            PostEntity post_data = postService.findPostById(post_id);
+
+            if (post_data == null){
+                throw new RuntimeException("Este post não existe");
+            }
+           
+                for (PostEntity userPost: user_data.get().getUser_posts()) {
+                    Boolean postExistsInUser = false;
+                    if (userPost.getId().equals(post_data.getId())){
+                        post_data.setImage(imageService.saveImage(newPostImage));
+                        postService.editPost(post_data, post_data.getId());
+                        postExistsInUser = true;
+                    }
+                    if (postExistsInUser == false){
+                        throw new RuntimeException("Este post não pertence a este usuario");
+                    }
+
+
+                }
+            
+            return user_data.get();
+        }
+        catch(Exception e){
+            throw new RuntimeException("Erro ao salvar a imagem do post",e);
+        }
+        
+    }
+
+    @Override
+    public FileSystemResource findUserPostImage(Long post_id, Long user_id) {
+        PostEntity post_data = postService.findPostById(post_id);
+        if (post_data == null){
+            throw new RuntimeException("Este post não existe");
+        }
+
+        Optional<UserEntity> user_data = userRepository.findById(user_id);
+        if (user_data.isEmpty()){
+            throw new RuntimeException("Este usuario não existe");
+        }
+
+        ImageEntity postImage = post_data.getImage();
+        
+        Boolean postExistsInUser = false;
+        for (PostEntity userPost: user_data.get().getUser_posts()) {
+            if (userPost.getId().equals(post_data.getId())){
+                postExistsInUser = true;
+                break;
+            }
+        }
+        if (postExistsInUser == false){
+            throw new RuntimeException("Este post não pertence a este usuario");
+        }
+        return postFileSystem.findInPostImages(postImage.getLocation());
+    }
+
+
+
 }
