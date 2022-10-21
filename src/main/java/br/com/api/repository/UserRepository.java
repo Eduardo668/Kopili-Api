@@ -12,5 +12,4 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 //    public List<UserEntity> findAllFriend_List(UserEntity user);
 
 
-
 }

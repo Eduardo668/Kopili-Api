@@ -64,6 +64,9 @@ public class UserEntity implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL)
     private ImageEntity userImage;
+    
+    @ManyToMany(mappedBy = "user_roles")
+    private List<RoleEntity> roles;
 
     
 

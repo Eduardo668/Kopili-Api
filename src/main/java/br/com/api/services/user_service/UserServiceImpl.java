@@ -9,10 +9,16 @@ import br.com.api.services.follower_service.FollowerServiceImpl;
 import br.com.api.services.image_service.ImageServiceImpl;
 import br.com.api.services.message_service.MessageServiceImpl;
 import br.com.api.services.post_service.PostServiceImpl;
+import br.com.api.services.user_service.user_delete_strategy.DeleteUserChat;
+import br.com.api.services.user_service.user_delete_strategy.DeleteUserComment;
+import br.com.api.services.user_service.user_delete_strategy.DeleteUserFollowers;
+import br.com.api.services.user_service.user_delete_strategy.DeleteUserImage;
+import br.com.api.services.user_service.user_delete_strategy.DeleteUserPost;
 import br.com.api.services.comment_service.CommentServiceImpl;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
+
 
 
 import java.util.*;
@@ -29,13 +35,22 @@ public class UserServiceImpl implements UserService {
     private final UserFileSystemRepo userFileSystem;
     private final PostFileSystemRepo postFileSystem;
     private final ImageServiceImpl imageService;
+
+    // DELETE USER STRATEGY IMPLEMENTAION CLASSES
+    private final DeleteUserChat deleteUserChat;
+    private final DeleteUserComment deleteUserComment;
+    private final DeleteUserPost deleteUserPost;
+    private final DeleteUserFollowers deleteUserFollowers;
+    private final DeleteUserImage deleteUserImage;
     
 
     public UserServiceImpl(UserRepository userRepository, PostServiceImpl postService,
                            CommentServiceImpl commentService, FollowerServiceImpl friendshipService,
                            ChatServiceImpl chatService, MessageServiceImpl messageService, 
                            UserFileSystemRepo userFileSystem, ImageServiceImpl imageService, 
-                           PostFileSystemRepo postFileSystem) {
+                           PostFileSystemRepo postFileSystem, DeleteUserChat deleteUserChat,
+                           DeleteUserComment deleteUserComment, DeleteUserFollowers deleteUserFollowers,
+                           DeleteUserImage deleteUserImage, DeleteUserPost deleteUserPost) {
         this.userRepository = userRepository;
         this.postService = postService;
         this.commentService = commentService;
@@ -45,7 +60,15 @@ public class UserServiceImpl implements UserService {
         this.userFileSystem = userFileSystem;
         this.imageService = imageService;
         this.postFileSystem = postFileSystem;
+        this.deleteUserChat = deleteUserChat;
+        this.deleteUserComment = deleteUserComment;
+        this.deleteUserFollowers = deleteUserFollowers;
+        this.deleteUserImage = deleteUserImage;
+        this.deleteUserPost = deleteUserPost;
+
     }
+
+    
 
 
     // Cadastra um usuario no Sistema
@@ -59,6 +82,7 @@ public class UserServiceImpl implements UserService {
                 throw new IllegalStateException("Este Username já está sendo usado.");
 
             }
+
 
             return userRepository.save(newUser);
 
@@ -76,18 +100,29 @@ public class UserServiceImpl implements UserService {
 
     // Deleta Usuario a partir do id
     @Override
-    public void deleteUser(Long id) {
+    public void deleteUser(Long user_id) {
         try {
-            Optional<UserEntity> user_data = userRepository.findById(id);
+            
 
-            if (user_data == null){
+            Optional<UserEntity> user_data = userRepository.findById(user_id);
+
+            if (user_data.isEmpty()){
                 throw new IllegalStateException("Este Usuário não existe.");
             }
+            
+     
+            deleteUserImage.verifyAndDeleteIfExist(user_data.get());
+            deleteUserComment.verifyAndDeleteIfExist(user_data.get());
+            deleteUserPost.verifyAndDeleteIfExist(user_data.get());           
+            deleteUserChat.verifyAndDeleteIfExist(user_data.get());
+            deleteUserFollowers.verifyAndDeleteIfExist(user_data.get());
+        
 
-            userRepository.delete(user_data.get());
+             userRepository.delete(user_data.get());
+        
         }
         catch (Exception e){
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao deletar o usuario",e);
         }
     }
     
@@ -328,15 +363,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity savePostImageMadeByUser(byte[] imageBytes, String imageName, Long user_id, Long post_id) {
+    public UserEntity savePostImageMadeByUser(byte[] imageBytes, String imageName,
+     Long user_id, Long post_id) {
         
         try{
-            
-            System.out.println("Antes de salvar a imagem no fileSystem");
-
             String imageLocation = postFileSystem.save(imageBytes, imageName);
-
-            System.out.println("Depois de salvar a imagem no fileSystem");
             
             ImageEntity newPostImage = new ImageEntity();
             newPostImage.setLocation(imageLocation);
@@ -403,7 +434,6 @@ public class UserServiceImpl implements UserService {
         }
         return postFileSystem.findInPostImages(postImage.getLocation());
     }
-
 
 
 }

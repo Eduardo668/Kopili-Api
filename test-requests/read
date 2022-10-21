@@ -1,0 +1,33 @@
+[
+    {
+        "id": 6,
+        "fullname": "Fernando Silva Gonsalves",
+        "username": "nando987",
+        "password": "nando123",
+        "email": "nando2022@gmail.com",
+        "born": "1983-02-11",
+        "comments": [],
+        "user_posts": [
+            {
+                "id": 6,
+                "link": "google.drive.work.com",
+                "description": "Trabalho bem feito lindo d+",
+                "subject": "Linguagens",
+                "comments": [],
+                "image": {
+                    "id": 8,
+                    "location": "/home/kopili/kopili-project/api/FileSystem/PostImages/1665971530915-publicacao-capa.png",
+                    "nome": "publicacao-capa.png"
+                },
+                "date": "2022-10-17"
+            }
+        ],
+        "chat_list": [],
+        "follow_list": [],
+        "userImage": {
+            "id": 6,
+            "location": "/home/kopili/kopili-project/api/FileSystem/UserImages/1665970434092-chad-image.png",
+            "nome": "chad-image.png"
+        }
+    }
+]

@@ -8,7 +8,8 @@ public interface ImageService {
     
     public ImageEntity saveImage(ImageEntity newImage);
 
-    public void deleteImage(Long image_id);
+    public void deleteUserImage(Long image_id);
+    public void deletePostImage(Long image_id);
 
     public List<ImageEntity> findAllImages();
 

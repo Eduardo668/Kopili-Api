@@ -23,10 +23,21 @@ public class ImageController {
         return ResponseEntity.ok(imageService.findAllImages());
     }
 
-    @DeleteMapping("/delete/image_id={image_id}")
-    public ResponseEntity<String> deleteImage(@PathVariable Long image_id){
+    @DeleteMapping("/deleteUserImage/image_id={image_id}")
+    public ResponseEntity<String> deleteUserImage(@PathVariable Long image_id){
         try{
-            imageService.deleteImage(image_id);
+            
+            return ResponseEntity.ok("Imagem deletada com sucesso");
+        }
+        catch(Exception e){
+            throw new RuntimeException("Erro ao realizar a requisição de deletação de uma imagem", e);
+        }
+    }
+
+    @DeleteMapping("/deletePostImage/image_id={image_id}")
+    public ResponseEntity<String> deletePostImage(@PathVariable Long image_id){
+        try{
+            imageService.deletePostImage(image_id);
             return ResponseEntity.ok("Imagem deletada com sucesso");
         }
         catch(Exception e){

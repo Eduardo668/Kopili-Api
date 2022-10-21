@@ -3,6 +3,8 @@ package br.com.api.services.post_service;
 import org.springframework.stereotype.Service;
 import br.com.api.models.PostEntity;
 import br.com.api.repository.PostRepository;
+import br.com.api.services.image_service.ImageService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -12,12 +14,15 @@ import java.util.Optional;
 @Service
 public class PostServiceImpl implements PostService{
 
-    @Autowired
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
+    private final ImageService imageService;
 
-    public PostServiceImpl(PostRepository postRepository) {
-       this.postRepository = postRepository;
+
+    public PostServiceImpl(PostRepository postRepository, ImageService imageService) {
+        this.postRepository = postRepository;
+        this.imageService = imageService;
     }
+
 
 	@Override
     public PostEntity createPost(PostEntity newPost) {
@@ -60,6 +65,14 @@ public class PostServiceImpl implements PostService{
     public void deletePost(Long id) {
         try {
             Optional<PostEntity> post_data = postRepository.findById(id);
+            if (post_data.isEmpty()){
+                throw new RuntimeException("Este post não existe");
+            }
+
+            if (post_data.get().getImage() != null){
+                System.out.println("Passou dentro do if para deletar a imagem do post");
+                imageService.deletePostImage(post_data.get().getImage().getId());
+            }
 
             postRepository.delete(post_data.get());
         }

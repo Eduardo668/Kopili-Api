@@ -1,6 +1,7 @@
 package br.com.api.file_management.user;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,6 +39,14 @@ public class UserFileSystemRepo {
         } catch (Exception e) {
             throw new RuntimeException("Erro ao retornar a imagem", e);
         }
+    }
+
+
+    public void deleteAnImageInTheFileSystem(String location) throws IOException{
+
+        Path path = Paths.get(location);
+        Files.delete(path);
+        
     }
 
 

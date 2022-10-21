@@ -1,6 +1,7 @@
 package br.com.api.file_management.post;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,6 +44,15 @@ public class PostFileSystemRepo {
         }
 
     }
+
+
+    public void deleteAnImageInTheFileSystem(String location) throws IOException{
+
+        Path path = Paths.get(location);
+        Files.delete(path);
+        
+    }
+
     
 
 }
