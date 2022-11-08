@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import br.com.kopili.models.UserEntity;
 import br.com.kopili.services.post_service.PostService;
 
+@Deprecated
 @Service
 public class DeleteUserPost implements UserDeleteStrategy {
 

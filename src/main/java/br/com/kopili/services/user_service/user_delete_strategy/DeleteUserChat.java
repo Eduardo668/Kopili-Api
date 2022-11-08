@@ -4,10 +4,9 @@ import org.springframework.stereotype.Service;
 
 import br.com.kopili.models.UserEntity;
 import br.com.kopili.services.chat_service.ChatServiceImpl;
-
+@Deprecated
 @Service
 public class DeleteUserChat implements UserDeleteStrategy {
-
 
     private final ChatServiceImpl chatService;
 

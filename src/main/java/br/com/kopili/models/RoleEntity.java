@@ -22,6 +22,7 @@ public class RoleEntity {
     private Long id;
 
     @Size(max = 50)
+    @Column(unique = true)
     private String nome;
 
 }

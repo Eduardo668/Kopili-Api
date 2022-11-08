@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PageService {
 
-    public List<PostEntity> feedPage(Long user_id);
+    public List<PostEntity> feedPage(String username);
 
     public List<PostEntity> explorarPage();
 

@@ -5,6 +5,8 @@ import java.util.List;
 // import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import br.com.kopili.models.PostEntity;
@@ -60,7 +62,15 @@ public class PostController{
         }
     }
 
-
+    @GetMapping(value = "/findPostImage/post_id={post_id}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<FileSystemResource> findPostImage(@PathVariable Long post_id){
+        try{
+            return ResponseEntity.ok(postService.findPostImage(post_id));
+        }
+        catch(Exception e){
+            throw new RuntimeException("Erro ao realizar a requisição de encontrar a imagem do usuario",e);
+        }
+    }
 
 
 }

@@ -20,6 +20,8 @@ public interface UserService {
 
     public List<UserEntity> findAllUsers();
 
+    public UserEntity findUserByPostId(Long post_id);
+
 
     public void deleteUser(Long user_id);
 
@@ -43,11 +45,11 @@ public interface UserService {
 
    public UserEntity saveUserImage(byte[] imageBytes, String imageName, Long user_id);
 
-   public FileSystemResource findUserImage(Long user_id);
+   public FileSystemResource findUserImage(String username);
 
    public UserEntity savePostImageMadeByUser(byte[] imageBytes, String imageName, Long user_id, Long post_id);
 
-   public FileSystemResource findUserPostImage(Long post_id, Long user_id);
+//   public FileSystemResource findUserPostImage(Long post_id, Long user_id);
 
    public void refreshToken(HttpServletRequest request, HttpServletResponse response);
 

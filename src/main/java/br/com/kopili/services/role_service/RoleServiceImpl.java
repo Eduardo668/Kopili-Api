@@ -39,4 +39,19 @@ public class RoleServiceImpl implements RoleService{
         }
     }
 
+    @Override
+    public RoleEntity findRoleByName(String name) {
+        try {
+            RoleEntity role_data = roleRepository.findByNome(name);
+            if (role_data == null){
+                throw new RuntimeException("Esta role não existe");
+            }
+
+            return role_data;
+
+        }catch (Exception e){
+            throw new RuntimeException("Erro ao procurar uma role pelo nome", e);
+        }
+    }
+
 }

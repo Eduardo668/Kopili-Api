@@ -13,18 +13,22 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserFileSystemRepo {
     
-    public String UsersImagesDir = "/home/kopili/kopili-project/api/FileSystem/UserImages"; 
 
-    public File pathAsFile = new File(UsersImagesDir);
+    public Path currentDir = Paths.get("").toAbsolutePath();
+    public String fileSystemDir = currentDir.normalize().toString();
+    public String userImageDir = fileSystemDir + "/users_images" ;
+
+    public File pathAsFile = new File(userImageDir);
+
 
     public String save(byte[] content, String imageName) throws Exception{
         
-        if (!Files.exists(Paths.get(UsersImagesDir))){
+        if (!Files.exists(Paths.get(userImageDir))){
             pathAsFile.mkdir();
         }
 
 
-        Path newImage = Paths.get(UsersImagesDir, new Date().getTime() + "-" + imageName);
+        Path newImage = Paths.get(userImageDir, new Date().getTime() + "-" + imageName);
         Files.createDirectories(newImage.getParent());
 
         Files.write(newImage, content);

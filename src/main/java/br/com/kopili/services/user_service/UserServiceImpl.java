@@ -30,6 +30,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
+import javax.management.relation.Role;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -53,14 +54,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserFileSystemRepo userFileSystem;
     private final PostFileSystemRepo postFileSystem;
     private final ImageServiceImpl imageService;
-
-    // DELETE USER STRATEGY IMPLEMENTAION CLASSES
-    private final DeleteUserChat deleteUserChat;
-    private final DeleteUserComment deleteUserComment;
-    private final DeleteUserPost deleteUserPost;
-    private final DeleteUserFollowers deleteUserFollowers;
-    private final DeleteUserImage deleteUserImage;
-    private final DeleteUserRoles deleteUserRoles;
 
     private final RoleService roleService;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -102,15 +95,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 
-            RoleEntity newRoleEntity = new RoleEntity();
+            List<RoleEntity> roles = new ArrayList<>();
+            roles.add(roleService.findRoleByName("ROLE_USER"));
 
-            newRoleEntity.setNome("ROLE_USER");
-
-
-            ArrayList<RoleEntity> roles = new ArrayList<>();
-
-            roles.add(roleService.createRole(newRoleEntity));
-            newUser.setRoles(roles);
+           newUser.setRoles(roles);
 
 
             return userRepository.save(newUser);
@@ -135,17 +123,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             newUserAdmin.setPassword(passwordEncoder.encode(newUserAdmin.getPassword()));
 
 
-            RoleEntity userRoleEntity = new RoleEntity();
-            RoleEntity adminRoleEntity = new RoleEntity();
-
-            userRoleEntity.setNome("ROLE_USER");
-            adminRoleEntity.setNome("ROLE_ADMIN");
 
 
             ArrayList<RoleEntity> roles = new ArrayList<>();
+            roles.add(roleService.findRoleByName("ROLE_USER"));
+            roles.add(roleService.findRoleByName("ROLE_ADMIN"));
 
-            roles.add(roleService.createRole(userRoleEntity));
-            roles.add(roleService.createRole(adminRoleEntity));
             newUserAdmin.setRoles(roles);
 
 
@@ -163,26 +146,30 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findAll();
     }
 
+    @Override
+    public UserEntity findUserByPostId(Long post_id) {
+        try {
+            PostEntity post_data = postService.findPostById(post_id);
+            if (post_data == null){
+                throw new RuntimeException("Este post não existe");
+            }
+            return post_data.getUserPost();
+        } catch (Exception e){
+            throw new RuntimeException("Ocorreu um erro ao procurar um user pelo post id");
+        }
+    }
 
 
     // Deleta Usuario a partir do id
     @Override
     public void deleteUser(Long user_id) {
         try {
-            
 
             Optional<UserEntity> user_data = userRepository.findById(user_id);
 
             if (user_data.isEmpty()){
                 throw new IllegalStateException("Este Usuário não existe.");
             }
-
-//            deleteUserRoles.verifyAndDeleteIfExist(user_data.get());
-//            deleteUserImage.verifyAndDeleteIfExist(user_data.get());
-//            deleteUserComment.verifyAndDeleteIfExist(user_data.get());
-//            deleteUserPost.verifyAndDeleteIfExist(user_data.get());
-//            deleteUserChat.verifyAndDeleteIfExist(user_data.get());
-//            deleteUserFollowers.verifyAndDeleteIfExist(user_data.get());
 
              userRepository.delete(user_data.get());
         
@@ -431,13 +418,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public FileSystemResource findUserImage(Long user_id) {
-        Optional<UserEntity> user_data = userRepository.findById(user_id);
-        if (user_data.isEmpty()){
+    public FileSystemResource findUserImage(String username) {
+        UserEntity user_data = userRepository.findByUsername(username);
+        if (user_data == null){
             throw new RuntimeException("Este usuario não existe");
         }
 
-        ImageEntity userImage = user_data.get().getUserImage();
+        ImageEntity userImage = user_data.getUserImage();
 
         return userFileSystem.findInUserImages(userImage.getLocation());
 
@@ -489,32 +476,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         
     }
 
-    @Override
-    public FileSystemResource findUserPostImage(Long post_id, Long user_id) {
-        PostEntity post_data = postService.findPostById(post_id);
-        if (post_data == null){
-            throw new RuntimeException("Este post não existe");
-        }
-
-        Optional<UserEntity> user_data = userRepository.findById(user_id);
-        if (user_data.isEmpty()){
-            throw new RuntimeException("Este usuario não existe");
-        }
-
-        ImageEntity postImage = post_data.getImage();
-        
-        Boolean postExistsInUser = false;
-        for (PostEntity userPost: user_data.get().getUser_posts()) {
-            if (userPost.getId().equals(post_data.getId())){
-                postExistsInUser = true;
-                break;
-            }
-        }
-        if (postExistsInUser == false){
-            throw new RuntimeException("Este post não pertence a este usuario");
-        }
-        return postFileSystem.findInPostImages(postImage.getLocation());
-    }
+//    @Override
+//    public FileSystemResource findUserPostImage(Long post_id, Long user_id) {
+//        PostEntity post_data = postService.findPostById(post_id);
+//        if (post_data == null){
+//            throw new RuntimeException("Este post não existe");
+//        }
+//
+//        Optional<UserEntity> user_data = userRepository.findById(user_id);
+//        if (user_data.isEmpty()){
+//            throw new RuntimeException("Este usuario não existe");
+//        }
+//
+//        ImageEntity postImage = post_data.getImage();
+//
+//        Boolean postExistsInUser = false;
+//        for (PostEntity userPost: user_data.get().getUser_posts()) {
+//            if (userPost.getId().equals(post_data.getId())){
+//                postExistsInUser = true;
+//                break;
+//            }
+//        }
+//        if (postExistsInUser == false){
+//            throw new RuntimeException("Este post não pertence a este usuario");
+//        }
+//        return postFileSystem.findInPostImages(postImage.getLocation());
+//    }
 
     @Override
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) {

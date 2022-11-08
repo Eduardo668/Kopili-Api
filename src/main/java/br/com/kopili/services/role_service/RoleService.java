@@ -8,5 +8,7 @@ public interface RoleService {
 
     public void deleteRole(Long role_id);
 
+    public RoleEntity findRoleByName(String name);
+
 
 }

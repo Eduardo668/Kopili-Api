@@ -16,6 +16,11 @@
  import org.springframework.security.core.userdetails.UserDetailsService;
  import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+ import org.springframework.web.cors.CorsConfiguration;
+ import org.springframework.web.cors.CorsConfigurationSource;
+ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+ import java.util.Arrays;
 
  import static org.springframework.http.HttpMethod.*;
  import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -49,12 +54,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.sessionManagement().sessionCreationPolicy(STATELESS);
 
-        http.authorizeRequests()
+        http.cors().and()
+                .authorizeRequests()
                 .antMatchers(
                         HttpMethod.POST,
                         "/kopili/login",
                         "/user/create",
                         "/user/create/admin"
+
                 )
                 .permitAll();
 
@@ -66,18 +73,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers(GET, "/user/token/refresh")
                 .permitAll();
 
-        http.authorizeRequests()
+        http.cors().and().authorizeRequests()
                 .antMatchers(GET, "/user/read")
                 .hasAnyAuthority("ROLE_ADMIN");
 
-        http.authorizeRequests()
+        http.cors().and().authorizeRequests()
                 .antMatchers(
                         GET,
                         "/user/findUserImage/**",
-                        "/user/findUserPostImage/**",
+                        "/post/findPostImage/**",
                         "/user/findAUser/**",
                         "/user/readUserFollowed/**",
-                        "/page/feed/**"
+                        "/page/feed/**",
+                        "/findUserByPostId/**"
                         )
                 .hasAnyAuthority("ROLE_USER");
 
@@ -87,8 +95,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/followSomeone/**"
         ).hasAnyAuthority("ROLE_USER");
 
+        http.authorizeRequests().antMatchers(
+                PUT,
+                "/user/userImageUpload/**",
+                "/user/postImageUpload/**"
 
 
+                ).hasAnyAuthority("ROLE_USER");
+
+
+        http.authorizeRequests().antMatchers(
+                DELETE,
+                "/post/delete/**",
+                "/user/delete/**"
+                ).hasAnyAuthority("ROLE_USER");
 
         http.authorizeRequests().anyRequest().authenticated();
 
@@ -102,4 +122,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Access-Control-Allow-Origin"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
 }

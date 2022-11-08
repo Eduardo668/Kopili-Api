@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.kopili.models.UserEntity;
 import br.com.kopili.services.comment_service.CommentServiceImpl;
-
+@Deprecated
 @Service
 public class DeleteUserComment implements UserDeleteStrategy {
 

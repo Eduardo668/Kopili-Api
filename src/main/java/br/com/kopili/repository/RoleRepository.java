@@ -7,5 +7,7 @@ import br.com.kopili.models.RoleEntity;
 
 @Repository
 public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
-    
+
+    public RoleEntity findByNome(String nome);
+
 }

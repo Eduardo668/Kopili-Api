@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.kopili.models.UserEntity;
 import br.com.kopili.services.follower_service.FollowerServiceImpl;
-
+@Deprecated
 @Service
 public class DeleteUserFollowers implements UserDeleteStrategy {
 

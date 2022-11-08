@@ -12,19 +12,21 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class PostFileSystemRepo {
-    
-    public String PostImagesDir =  "/home/kopili/kopili-project/api/FileSystem/PostImages";
-    
-    public File pathAsFile = new File(PostImagesDir);
+
+    public Path currentDir = Paths.get("").toAbsolutePath();
+    public String fileSystemDir = currentDir.normalize().toString();
+    public String postImageDir = fileSystemDir + "/posts_images" ;
+
+    public File pathAsFile = new File(postImageDir);
 
 
     public String save(byte[] content, String imageName) throws Exception{
 
-            if (!Files.exists(Paths.get(PostImagesDir))){
+            if (!Files.exists(Paths.get(postImageDir))){
                 pathAsFile.mkdir();
             }
 
-            Path newImage = Paths.get(PostImagesDir, new Date().getTime() + "-" + imageName);
+            Path newImage = Paths.get(postImageDir, new Date().getTime() + "-" + imageName);
 
             Files.createDirectories(newImage.getParent());
 

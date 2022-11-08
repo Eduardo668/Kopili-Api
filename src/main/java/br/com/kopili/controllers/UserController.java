@@ -24,7 +24,7 @@ import java.util.List;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
@@ -84,10 +84,10 @@ public class UserController {
 
 
 
-    @GetMapping(value = "/findUserImage/user_id={user_id}", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<FileSystemResource> findUserImage(@PathVariable Long user_id){
+    @GetMapping(value = "/findUserImage/username={username}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<FileSystemResource> findUserImage(@PathVariable String username){
         try{
-            return ResponseEntity.ok(userService.findUserImage(user_id));
+            return ResponseEntity.ok(userService.findUserImage(username));
         }
         catch(Exception e){
             throw new RuntimeException("Erro ao realizar a requisição de encontrar a imagem do usuario",e);
@@ -95,15 +95,17 @@ public class UserController {
         
     }
 
-    @GetMapping(value = "/findUserPostImage/user_id={user_id}/post_id={post_id}", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<FileSystemResource> findUserImage(@PathVariable Long user_id, @PathVariable Long post_id){
-        try{
-            return ResponseEntity.ok(userService.findUserPostImage(post_id, user_id));
-        }
-        catch(Exception e){
-            throw new RuntimeException("Erro ao realizar a requisição de encontrar a imagem do usuario",e);
-        }
-    }
+//    @GetMapping(value = "/findUserPostImage/user_id={user_id}/post_id={post_id}", produces = MediaType.IMAGE_PNG_VALUE)
+//    public ResponseEntity<FileSystemResource> findUserImage(@PathVariable Long user_id, @PathVariable Long post_id){
+//        try{
+//            return ResponseEntity.ok(userService.findUserPostImage(post_id, user_id));
+//        }
+//        catch(Exception e){
+//            throw new RuntimeException("Erro ao realizar a requisição de encontrar a imagem do usuario",e);
+//        }
+//    }
+
+
 
 
     // End-Point para visualizar todos os usuarios que estão cadastrados no banco de dados
@@ -116,6 +118,17 @@ public class UserController {
     public ResponseEntity<UserEntity> findUser(@PathVariable("username") String username){
         return ResponseEntity.ok(userService.findUserByUsername(username));
     }
+
+    @GetMapping("/findUserByPostId/post_id={post_id}")
+    public ResponseEntity<String> findUserByPostId(@PathVariable Long post_id){
+        try {
+            return ResponseEntity.ok(userService.findUserByPostId(post_id).getUsername());
+        } catch (Exception e){
+            throw new RuntimeException("Erro ao realizar na requisição do user pelo post id");
+        }
+
+    }
+
     // End-Point para editar um usuario pelo id
     @PutMapping("/edit/{id}")
     public ResponseEntity<UserEntity> editUser(@RequestBody UserEntity editedUser, @PathVariable("id") Long user_id){

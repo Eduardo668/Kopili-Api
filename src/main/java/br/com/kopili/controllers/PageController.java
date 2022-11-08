@@ -19,10 +19,10 @@ public class PageController {
 
     private final PageServiceImpl pageService;
 
-    @GetMapping("/feed/user_id={user_id}")
-    public ResponseEntity<List<PostEntity>> feedPage(@PathVariable Long user_id){
+    @GetMapping("/feed/username={username}")
+    public ResponseEntity<List<PostEntity>> feedPage(@PathVariable String username){
         try {
-            return ResponseEntity.ok().body(pageService.feedPage(user_id));
+            return ResponseEntity.ok().body(pageService.feedPage(username));
         }
         catch (Exception e){
             throw new RuntimeException("Erro ao realizar a requisição na feedPage");
@@ -31,7 +31,7 @@ public class PageController {
 
     @GetMapping("/explorar")
     public ResponseEntity<List<PostEntity>> explorarPage(){
-        return  null;
+        return null;
     }
 
     @GetMapping("/perfil/user_id={user_id}")

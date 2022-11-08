@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
+@Deprecated
 public class DeleteUserRoles implements UserDeleteStrategy {
 
     private final RoleServiceImpl roleService;

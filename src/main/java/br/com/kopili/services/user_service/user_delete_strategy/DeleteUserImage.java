@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.kopili.models.UserEntity;
 import br.com.kopili.services.image_service.ImageServiceImpl;
-
+@Deprecated
 @Service
 public class DeleteUserImage implements UserDeleteStrategy {
 

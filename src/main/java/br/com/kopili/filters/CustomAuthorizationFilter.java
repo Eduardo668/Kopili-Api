@@ -71,7 +71,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
 
                         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-
+//                        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
                         filterChain.doFilter(request, response);
 
 
@@ -82,7 +82,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                         response.setStatus(403);
 
                         Map<String, String> error_message = new HashMap<>();
-                        error_message.put("error", e.getMessage());
+                        error_message.put("error", e.toString());
                         response.setContentType(APPLICATION_JSON_VALUE);
                         new ObjectMapper().writeValue(response.getOutputStream(), error_message);
 

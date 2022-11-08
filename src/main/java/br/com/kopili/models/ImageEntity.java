@@ -1,5 +1,6 @@
 package br.com.kopili.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -29,7 +30,8 @@ public class ImageEntity{
     
     @OneToOne(mappedBy = "userImage")
     private UserEntity imageUser;
-    
+
+    @JsonIgnore
     @OneToOne(mappedBy = "image")
     private PostEntity imagePost;
 

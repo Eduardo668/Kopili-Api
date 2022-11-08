@@ -19,22 +19,4 @@ public class SaBackendApplication {
 		SpringApplication.run(SaBackendApplication.class, args);
 	}
 
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder(){
-		return new BCryptPasswordEncoder();
-	}
-
-	@Autowired
-	private Environment environment;
-
-	@Bean
-	public AlgorithmUtil algorithmUtil(){
-		return new AlgorithmUtil(environment);
-	}
-
-	@Bean
-	public AuthorizeAlwaysRoutesUtil authorizeAlwaysRoutesUtil(){
-		return new AuthorizeAlwaysRoutesUtil();
-	}
-
 }
