@@ -59,7 +59,16 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public UserEntity perfilPage(Long user_id) {
-        return null;
+    public UserEntity perfilPage(String username) {
+        try{
+            UserEntity user_data = userService.findUserByUsername(username);
+            if (user_data == null){
+                throw new RuntimeException("Este usuario não existe");
+            }
+
+            return user_data;
+        }catch (Exception e){
+            throw new RuntimeException("Erro ao retornar o usuario", e);
+        }
     }
 }

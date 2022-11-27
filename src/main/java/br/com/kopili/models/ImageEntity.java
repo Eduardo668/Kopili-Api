@@ -16,6 +16,7 @@ import javax.validation.constraints.Size;
 @Data
 @NoArgsConstructor
 @ToString
+@Deprecated
 public class ImageEntity{
 
     @Id

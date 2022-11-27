@@ -10,6 +10,7 @@ import java.util.Date;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
 
+@Deprecated
 @Repository
 public class PostFileSystemRepo {
 

@@ -5,6 +5,7 @@ import br.com.kopili.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,6 +53,11 @@ public class RoleServiceImpl implements RoleService{
         }catch (Exception e){
             throw new RuntimeException("Erro ao procurar uma role pelo nome", e);
         }
+    }
+
+    @Override
+    public List<RoleEntity> findAllRoles() {
+        return roleRepository.findAll();
     }
 
 }

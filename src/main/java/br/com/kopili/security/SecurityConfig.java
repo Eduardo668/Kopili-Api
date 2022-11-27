@@ -85,15 +85,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/findAUser/**",
                         "/user/readUserFollowed/**",
                         "/page/feed/**",
-                        "/findUserByPostId/**"
+                        "/findUserByPostId/**",
+                        "/page/explorar",
+                        "/user/findUsersByUsername/**",
+                        "/user/followSomeone/**/**/"
+
+
                         )
                 .hasAnyAuthority("ROLE_USER");
 
         http.authorizeRequests().antMatchers(
                 POST,
-                "/makePost/**",
-                "/followSomeone/**"
-        ).hasAnyAuthority("ROLE_USER");
+                "/makePost/**"
+                ).hasAnyAuthority("ROLE_USER");
 
         http.authorizeRequests().antMatchers(
                 PUT,
@@ -126,9 +130,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Access-Control-Allow-Origin"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Access-Control-Allow-Origin", "Content-Type"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

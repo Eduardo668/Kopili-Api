@@ -190,6 +190,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 user.setPassword(editedUser.getPassword());
                 user.setUsername(editedUser.getUsername());
                 user.setUserImage(editedUser.getUserImage());
+                user.setImage_url(editedUser.getImage_url());
                 return userRepository.save(user);
             }).orElseGet(() -> {
                 editedUser.setId(id);
@@ -217,25 +218,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     // Se tornar seguidor de outro usuario
     @Override
-    public void follow(Long yourUser_id, Long friend_id) {
+    public void follow(String your_username, String follow_username) {
           try {
 
-              Optional<UserEntity> user1_data = userRepository.findById(yourUser_id);
-              Optional<UserEntity> user2_data = userRepository.findById(friend_id);
+              UserEntity user1_data = userRepository.findByUsername(your_username);
+              UserEntity user2_data = userRepository.findByUsername(follow_username);
 
-              if (user1_data.isEmpty()){
+              if (user1_data == null){
                   throw new RuntimeException("Error com user 1");
-              } else if (user2_data.isEmpty()) {
+              } else if (user2_data == null) {
                   throw new RuntimeException("Error com user 2");
               }
 
               FollowerEntity followerObject = new FollowerEntity();
 
-              followerObject.setUser1(friend_id);
+              followerObject.setUser1(user2_data.getId());
 
               List<UserEntity> userArrayForSave = new ArrayList<>();
 
-              userArrayForSave.add(user1_data.get());
+              userArrayForSave.add(user1_data);
 
               followerObject.setUserFollowed(userArrayForSave);
 
@@ -248,10 +249,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     // Fazer uma publicação
     @Override
-    public UserEntity makePost(Long user_id, PostEntity newPost) {
+    public UserEntity makePost(String username, PostEntity newPost) {
         try {
-            Optional<UserEntity> user_data = userRepository.findById(user_id);
-            if(user_data.isEmpty()){
+            UserEntity user_data = userRepository.findByUsername(username);
+            if(user_data == null){
                 throw new RuntimeException("Deu ruim");
             }
 
@@ -259,11 +260,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             postEntities.add(newPost);
 
-            newPost.setUserPost(user_data.get());
+            newPost.setUserPost(user_data);
 
             postService.createPost(newPost);
 
-            return user_data.get();
+            return user_data;
 
         }catch (Exception e){
             throw new RuntimeException("Falhou na ao fazer o post",e);
@@ -388,7 +389,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
     }
 
-
+    @Deprecated
     @Override
     public UserEntity saveUserImage(byte[] imageBytes, String imageName, Long user_id) {
 
@@ -416,7 +417,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
  
     }
 
-
+    @Deprecated
     @Override
     public FileSystemResource findUserImage(String username) {
         UserEntity user_data = userRepository.findByUsername(username);
@@ -430,6 +431,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     }
 
+    @Deprecated
     @Override
     public UserEntity savePostImageMadeByUser(byte[] imageBytes, String imageName,
      Long user_id, Long post_id) {
@@ -530,7 +532,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
                 Map<String, String> access_token = new HashMap<>();
-                access_token.put("new_access_token", newAccessToken);
+                access_token.put("access_token", newAccessToken);
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), access_token);
 
@@ -551,6 +553,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw  new RuntimeException("Esta faltando o refresh_token");
         }
 
+    }
+
+
+    @Override
+    public List<UserEntity> findUsersByUsername(String username) {
+        try{
+            return userRepository.findByUsernameStartsWith(username);
+        }
+        catch(Exception e){
+            throw new RuntimeException("Erro ao procurar usuarios que começam com x valor", e);
+        }
     }
 
 

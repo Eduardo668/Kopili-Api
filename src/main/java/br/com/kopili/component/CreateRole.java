@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Component
 @Transactional
@@ -18,14 +19,20 @@ public class CreateRole implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-//        RoleEntity role_user =  new RoleEntity();
-//        role_user.setNome("ROLE_USER");
-//
-//        RoleEntity role_admin = new RoleEntity();
-//        role_admin.setNome("ROLE_ADMIN");
-//
-//        roleService.createRole(role_user);
-//        roleService.createRole(role_admin);
+        RoleEntity role_user =  new RoleEntity();
+        role_user.setNome("ROLE_USER");
+
+        RoleEntity role_admin = new RoleEntity();
+        role_admin.setNome("ROLE_ADMIN");
+
+        List<RoleEntity>  roles = roleService.findAllRoles();
+
+        if (roles.size() == 0){
+            roleService.createRole(role_user);
+            roleService.createRole(role_admin);
+        }
+
+
 
 
 

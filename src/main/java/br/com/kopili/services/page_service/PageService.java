@@ -11,7 +11,7 @@ public interface PageService {
 
     public List<PostEntity> explorarPage();
 
-    public UserEntity perfilPage(Long user_id);
+    public UserEntity perfilPage(String username);
 
 
 }

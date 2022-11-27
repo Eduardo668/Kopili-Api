@@ -55,6 +55,9 @@ public class UserEntity implements Serializable {
     @NotNull
     private Date born;
 
+    @Size(max = 500)
+    private String image_url;
+
     @OneToMany(mappedBy = "user_comment")
     @OnDelete(action = OnDeleteAction.CASCADE)
 //    @JsonManagedReference
@@ -75,6 +78,7 @@ public class UserEntity implements Serializable {
     //@JsonManagedReference
     private List<FollowerEntity> follow_list;
 
+    @Deprecated
     @OneToOne(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private ImageEntity userImage;

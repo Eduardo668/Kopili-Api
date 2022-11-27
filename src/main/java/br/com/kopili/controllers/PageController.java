@@ -31,12 +31,16 @@ public class PageController {
 
     @GetMapping("/explorar")
     public ResponseEntity<List<PostEntity>> explorarPage(){
-        return null;
+        return ResponseEntity.ok(pageService.explorarPage());
     }
 
-    @GetMapping("/perfil/user_id={user_id}")
-    public ResponseEntity<UserEntity> perfilPage(@PathVariable Long user_id){
-        return null;
+    @GetMapping("/perfil/username={username}")
+    public ResponseEntity<UserEntity> perfilPage(@PathVariable String username){
+        try{
+            return ResponseEntity.ok().body(pageService.perfilPage(username));
+        }catch (Exception e){
+            throw new RuntimeException("Erro ao realizar a requisição do perfil do usuario",e);
+        }
     }
 
 

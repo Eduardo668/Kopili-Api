@@ -51,6 +51,7 @@ public class PostServiceImpl implements PostService{
                 post.setDescription(editedPost.getDescription());
                 post.setSubject(editedPost.getSubject());
                 post.setImage(editedPost.getImage());
+                post.setImage_url(editedPost.getImage_url());
                 return postRepository.save(post);
             }).orElseGet(() -> {
                 editedPost.setId(id);
@@ -82,6 +83,7 @@ public class PostServiceImpl implements PostService{
         }
     }
 
+    @Deprecated
     @Override
     public FileSystemResource findPostImage(Long post_id) {
         try{

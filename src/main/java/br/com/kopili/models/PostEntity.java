@@ -36,6 +36,9 @@ public class PostEntity {
     @NotNull
     private String subject;
 
+    @Size(max = 500)
+    private String image_url;
+
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy") 
 	@NotNull
@@ -48,7 +51,8 @@ public class PostEntity {
     @JoinColumn(name = "user_id")
 	@JsonBackReference
 	private UserEntity userPost;
-	
+
+    @Deprecated
 	@OneToOne(cascade = CascadeType.ALL)
 	private ImageEntity image;
 

@@ -29,11 +29,13 @@ public interface UserService {
 
     public UserEntity findUserById(Long user_id);
 
-    public void follow(Long yourUser_id, Long friend_id);
+    public void follow(String user_1, String user_2);
 
-    public UserEntity makePost(Long user_id, PostEntity newPost);
+    public UserEntity makePost(String username, PostEntity newPost);
 
     public UserEntity findUserByUsername(String username);
+
+    public List<UserEntity> findUsersByUsername(String username);
 
     public List<UserEntity> findAllFollowedUsers(Long user_id);
 
@@ -43,10 +45,13 @@ public interface UserService {
 
    public ChatEntity sendMessage(String message, Long chat_id);
 
+   @Deprecated
    public UserEntity saveUserImage(byte[] imageBytes, String imageName, Long user_id);
 
+    @Deprecated
    public FileSystemResource findUserImage(String username);
 
+    @Deprecated
    public UserEntity savePostImageMadeByUser(byte[] imageBytes, String imageName, Long user_id, Long post_id);
 
 //   public FileSystemResource findUserPostImage(Long post_id, Long user_id);

@@ -10,6 +10,7 @@ import br.com.kopili.services.image_service.ImageServiceImpl;
 
 @RestController
 @RequestMapping("/image")
+@Deprecated
 public class ImageController {
     
     private final ImageServiceImpl imageService;

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.kopili.models.ImageEntity;
 
+@Deprecated
 @Repository
 public interface ImageRepository extends JpaRepository<ImageEntity, Long> {
     

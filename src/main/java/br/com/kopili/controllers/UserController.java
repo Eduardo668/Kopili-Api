@@ -24,7 +24,7 @@ import java.util.List;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:3000")
+
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
@@ -52,7 +52,7 @@ public class UserController {
         }
     }
 
-
+    @Deprecated
     @PutMapping("/userImageUpload/user_id={user_id}")
     public ResponseEntity<UserEntity> uploadUserImage(@RequestParam MultipartFile image,
     @PathVariable Long user_id){
@@ -67,6 +67,7 @@ public class UserController {
       
     }
 
+    @Deprecated
     @PutMapping("/postImageUpload/user_id={user_id}/post_id={post_id}")
     public ResponseEntity<UserEntity> uploadPostImage(@RequestParam MultipartFile postImage, 
     @PathVariable Long user_id, @PathVariable Long post_id){
@@ -83,7 +84,7 @@ public class UserController {
     }
 
 
-
+    @Deprecated
     @GetMapping(value = "/findUserImage/username={username}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<FileSystemResource> findUserImage(@PathVariable String username){
         try{
@@ -120,13 +121,29 @@ public class UserController {
     }
 
     @GetMapping("/findUserByPostId/post_id={post_id}")
-    public ResponseEntity<String> findUserByPostId(@PathVariable Long post_id){
+    public ResponseEntity<UserPhotoAndUsernameResponse> findUserByPostId(@PathVariable Long post_id){
+
         try {
-            return ResponseEntity.ok(userService.findUserByPostId(post_id).getUsername());
+            UserEntity user_data = userService.findUserByPostId(post_id);
+
+            UserPhotoAndUsernameResponse userPhotoAndUsername = new UserPhotoAndUsernameResponse();
+            userPhotoAndUsername.setUsername(user_data.getUsername());
+            userPhotoAndUsername.setImage_url(user_data.getImage_url());
+
+            return ResponseEntity.ok(userPhotoAndUsername);
         } catch (Exception e){
             throw new RuntimeException("Erro ao realizar na requisição do user pelo post id");
         }
 
+    }
+
+    @GetMapping("/findUsersByUsername/username={username}")
+    public ResponseEntity<List<UserEntity>> findUsersByUsername(@PathVariable String username){
+        try{
+            return ResponseEntity.ok().body(userService.findUsersByUsername(username));
+        } catch (Exception e){
+            throw new RuntimeException("Erro ao realizar a requisição de encotrar usuarios pelo username",e);
+        }
     }
 
     // End-Point para editar um usuario pelo id
@@ -152,21 +169,21 @@ public class UserController {
         }
     }
 
-    @PostMapping("/makePost/user_id={user_id}")
-    public ResponseEntity<UserEntity> makePost(@RequestBody PostEntity newPost, @PathVariable("user_id") Long user_id){
+    @PostMapping("/makePost/username={username}")
+    public ResponseEntity<UserEntity> makePost(@RequestBody PostEntity newPost, @PathVariable("username") String username){
         try{
-            return ResponseEntity.ok(userService.makePost(user_id, newPost));
+            return ResponseEntity.ok(userService.makePost(username, newPost));
         }
         catch (Exception e){
             throw new RuntimeException("RUIM", e);
         }
     }
 
-    @PostMapping("/followSomeone/user1_id={user1_id}/user2_id={user2_id}")
-    public ResponseEntity<String> followSomeone(@PathVariable("user1_id") Long user1,
-                                             @PathVariable("user2_id") Long user2){
+    @GetMapping("/followSomeone/user_1={username1}/user_2={username2}")
+    public ResponseEntity<String> followSomeone(@PathVariable String username1,
+                                             @PathVariable String username2){
         try {
-            userService.follow(user1, user2);
+            userService.follow(username1, username2);
             return ResponseEntity.ok("AMIZADE criada com sucesso");
         }catch (Exception e){
             throw new RuntimeException("Ruim", e);
@@ -218,6 +235,26 @@ public class UserController {
         userService.refreshToken(request, response);
     }
 
+
+
+}
+
+
+class UserPhotoAndUsernameResponse {
+    private String username;
+    private String image_url;
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getImage_url() {
+        return image_url;
+    }
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
 
 
 }
